@@ -4,11 +4,10 @@
 /**
  * @file
  * Handles installation steps for service_uptime
- *
- * @ingroup service_uptime
- * @{
+ * 
+ * @ingroup func_search
+ * @{ 
  */
-
 
 /**
  * Create the private key (store to db)
@@ -36,30 +35,16 @@ function service_uptime_install() {
  * The uninstall hook will fire when the module gets uninstalled.
  */
 function service_uptime_uninstall() {
-
+  
   //Clean up our entries in the variables table.
-  $result = db_query("SELECT name FROM {variable} WHERE `name` LIKE 'service_uptime%'");
-  while ($data = db_fetch_object($result)) {
-    variable_del($data->name);
-  }
+  if ($result = db_query("SELECT name FROM {variable} WHERE `name` LIKE 'service_uptime%'")) {
+    foreach($result as $data) {
+      variable_del($data->name);
+    }    
+  }	
   
   //delete blocks
-  db_query("DELETE FROM {blocks} WHERE `module` = 'service_uptime'");
-	
-  //go through all users and remove the user vars set by this module
-  $result = db_query("SELECT uid FROM {users}");
-  while ($data = db_fetch_object($result)) {
-    $account = user_load($data->uid);
-    $unset = array();
-    foreach (array_keys((array)$account) as $key) {
-      if (strpos($key, 'eqcalc_') === 0) {
-        $unset[$key] = NULL;
-      }
-    }
-    if (count($unset)) {
-      user_save($account, $unset);  
-    }
-  }	
+  db_query("DELETE FROM {block} WHERE `module` = 'service_uptime'");
 }
 
 /**

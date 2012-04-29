@@ -100,6 +100,15 @@ function service_uptime_disable() {
 }
 
 /**
+ * Implementation of hook_init()
+ */
+function service_uptime_init() {
+  //$path = drupal_get_path('module', 'service_uptime');
+  //drupal_add_css($path .'/service_uptime.css');
+  //drupal_add_js($path .'/service_uptime.js');
+}
+
+/**
  * Implementation of hook_help()
  *
  * http://api.drupal.org/api/function/hook_help
@@ -124,9 +133,9 @@ function service_uptime_disable() {
 function service_uptime_help($path, $arg) {
   switch ($path) {
     case 'admin/help#service_uptime':
-      
-      // Return a line-break version of the module README
-      return filter_filter('process', 1, NULL, file_get_contents(dirname(__FILE__) ."/README.txt"));
+      $help = '';
+      $help .= check_markup(file_get_contents(drupal_get_path('module', 'service_uptime') .'/README.txt'), 'plain_text');
+      return $help;
 
     //case '':
       //$help = '';
@@ -137,20 +146,14 @@ function service_uptime_help($path, $arg) {
 }
 
 /**
- * Implementation of hook_init()
- */
-function service_uptime_init() {
-  //$path = drupal_get_path('module', 'service_uptime');
-  //drupal_add_css($path .'/service_uptime.css');
-  //drupal_add_js($path .'/service_uptime.js');
-}
-
-/**
  * Implementation of hook_perm()
  */
-function service_uptime_perm() {
+function service_uptime_permission() {
   return array(
-    'administer service_uptime',
+    'administer service_uptime' => array(
+      'title' => t('Administer service_uptime'), 
+      'description' => t('Perform administration tasks for service_uptime.'),
+    ),
   );
 }
 
@@ -200,72 +203,6 @@ function service_update_is_allowed() {
   return in_array($_SERVER['HTTP_HOST'], array(
     'serviceuptime.com',
   ));
-}
-
-/**
- * Implementation of hook_preprocess_page()
- */
-function service_uptime_preprocess_page(&$vars) {
-
-}
-
-/**
- * Implementation of hook_preprocess_node()
- */
-function service_uptime_preprocess_node(&$vars) {
-  $node = $vars['node'];
-}
-
-
-/**
- * Implementation of hook_views_api().
- */
-//function service_uptime_views_api() {
-//  return array(
-//    'api' => 2,
-//    'path' => drupal_get_path('module', 'service_uptime'),
-//  );
-//}
-
-/**
- * Implementation of hook_nodeapi()
- * http://api.drupal.org/api/function/hook_nodeapi
- * - "alter": the $node->content array has been rendered, so the node body or
- *        teaser is filtered and now contains HTML. This op should only be used when
- *        text substitution, filtering, or other raw text operations are necessary.
- * - "delete": The node is being deleted.
- * - "delete revision": The revision of the node is deleted. You can delete data
- *        associated with that revision.
- * - "insert": The node is being created (inserted in the database).
- * - "load": The node is about to be loaded from the database. This hook can be
- *       used to load additional data at this time.
- * - "prepare": The node is about to be shown on the add/edit form.
- * - "prepare translation": The node is being cloned for translation. Load
- *       additional data or copy values from $node->translation_source.
- * - "print": Prepare a node view for printing. Used for printer-friendly view
- *       in book_module
- * - "rss item": An RSS feed is generated. The module can return properties to
- *       be added to the RSS item generated for this node. See comment_nodeapi() and
- *       upload_nodeapi() for examples. The $node passed can also be modified to add
- *       or remove contents to the feed item.
- * - "search result": The node is displayed as a search result. If you want to
- *        display extra information with the result, return it.
- * - "presave": The node passed validation and is about to be saved. Modules may
- *        use this to make changes to the node before it is saved to the database.
- * - "update": The node is being updated.
- * - "update index": The node is being indexed. If you want additional
- *        information to be indexed which is not already visible through nodeapi
- *        "view", then you should return it here.
- * - "validate": The user has just finished editing the node and is trying to
- *        preview or submit it. This hook can be used to check the node data. Errors
- *        should be set with form_set_error().
- * - "view": The node content is being assembled before rendering. The module
- *        may add elements $node->content prior to rendering. This hook will be called
- *        after hook_view(). The format of $node->content is the same as used by Forms
- *        API. 
- */
-function service_uptime_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-
 }
   
 /**

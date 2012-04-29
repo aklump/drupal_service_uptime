@@ -1,7 +1,5 @@
 <?php
-// $Id$ 
-//@@tags modules drupal 6.x
-//@@details A basic skeleton for a module.admin.inc file
+// $Id$
 
 /** 
  * @file 
@@ -78,7 +76,7 @@ function service_uptime_admin_settings() {
       '#title' => t('Page URL'),
       '#value' => url(SERVICE_UPTIME_PATH_CHECK, array(
         'absolute' => TRUE,
-        'query' => drupal_query_string_encode(array('s' => _service_uptime_private_key()))
+        'query' => array('s' => _service_uptime_private_key()),
       )),
       '#attributes' => array('readonly' => TRUE),
     );

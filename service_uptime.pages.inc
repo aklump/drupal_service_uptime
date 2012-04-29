@@ -102,7 +102,7 @@ function service_uptime_check_page() {
   //this is just a way to obfuscate a bit more; adding time stuff
   $output .= _service_uptime_hash(time()) . _service_uptime_hash($seed) . _service_uptime_hash(time() / 2);
   
-  drupal_set_header('Content-Type: text/html; charset=utf-8');
+  drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
   exit($output);
 }
 
