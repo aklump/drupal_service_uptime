@@ -1,0 +1,312 @@
+<?php
+// $Id$ 
+
+/** 
+ * @file 
+ * Base module file for service_uptime
+ *
+ * @defgroup service_uptime Service Uptime Module
+ * @{
+ */
+
+/**
+ * @var SERVICE_UPTIME_URL_STATS
+ * This is the base url for stats
+ */
+define('SERVICE_UPTIME_URL_STATS', 'http://www.serviceuptime.com/users/servicestat.php');
+
+/**
+ * @var SERVICE_UPTIME_REGEX
+ * This is the regex for checking user token links
+ */
+define('SERVICE_UPTIME_REGEX', '/^https?:\/\/www\.serviceuptime.com\/users\/uptimemonitoring\.php(\?(S=\w+)\&(Id=\d+))$/');
+
+/**
+ * @var SERVICE_UPTIME_URL_STATS
+ * The url to be used to link to stats page
+ */
+define('SERVICE_UPTIME_PATH_DRUPAL_STATS', 'admin/reports/service-uptime/stats');
+
+/**
+ * @var SERVICE_UPTIME_PATH_DRUPAL_SETTINGS
+ * The internal path to settings page
+ */
+define('SERVICE_UPTIME_PATH_DRUPAL_SETTINGS', 'admin/reports/service-uptime/settings');
+
+/**
+ * @var SERVICE_UPTIME_URL_AFFILIATE_EXPLANATION
+ * The url to the affiliate program info
+ */
+define('SERVICE_UPTIME_URL_AFFILIATE_EXPLANATION', 'https://www.serviceuptime.com/affiliate.php');
+
+/**
+ * @var SERVICE_UPTIME_EXAMPLE_LINK
+ * The example format of a link
+ */
+define('SERVICE_UPTIME_EXAMPLE_LINK', 'http://www.serviceuptime.com/users/uptimemonitoring.php?S=5a9563b25eed645fccf7ec5bf8409ef2&Id=12239');
+
+/**
+ * @var SERVICE_UPTIME_PATH_CHECK
+ * The internal drupal path to the check url for SU to ping
+ */
+define('SERVICE_UPTIME_PATH_CHECK', 'service-uptime/check');
+
+/**
+ * Get the affiliate or non-affiliated link to service uptime
+ */
+function _service_uptime_url() {  
+  $url = 'http://www.ServiceUptime.com/';
+  //@todo add in affiliated link checking
+  if (1) {
+    $url .= '?aff=R779';
+  }
+  return $url;
+}
+
+/**
+ * Get an <a> tag with the correctly formatted affiliate link
+ */
+function _service_uptime_l($title = '', $url = '') {
+  $title = empty($title) ? 'www.ServiceUptime.com' : $title;
+  $url = empty($url) ? _service_uptime_url() : $url;
+  return l($title, $url, array('attributes' => array('onclick' => 'window.open(this.href); return false;')));
+}
+
+/**
+ * Implementation of hook_enable()
+ */
+function service_uptime_enable() {
+  
+  //message about module settings
+  //@todo this did not work; fix
+  drupal_set_message(theme("service_uptime_configure_message"));
+
+  //make a note of who enabled it
+  global $user;
+  watchdog('service_uptime', 'service_uptime module enabled by %user (uid: %uid)', array('%user' => $user->name, '%uid' => $user->uid));
+  
+  //change the system weight for the module, if needed
+  //$weight = db_result(db_query_range("SELECT weight FROM {system} WHERE name = 'fieldgroup'", 1));
+  //db_query("UPDATE {system} SET `weight` = ". ++$weight ." WHERE name = 'service_uptime'"); //don't do alimit on this query in case there are more than one entries?
+}
+
+/**
+ * Implementation of hook_disable()
+ */
+function service_uptime_disable() {
+  //make a note of who disabled it
+  global $user;
+  watchdog('service_uptime', 'service_uptime module disabled by %user (uid: %uid)', array('%user' => $user->name, '%uid' => $user->uid));
+}
+
+/**
+ * Implementation of hook_help()
+ *
+ * http://api.drupal.org/api/function/hook_help
+ *
+ * @param string $path
+ *   The router menu path, as defined in hook_menu(), for the help that is
+ *   being requested; e.g., 'admin/node' or 'user/edit'. If the router path
+ *   includes a % wildcard, then this will appear in $path; for example, node
+ *   pages would have $path equal to 'node/%' or 'node/%/view'. Your hook
+ *   implementation may also be called with special descriptors after a "#" sign.
+ * @param array $arg
+ *   An array that corresponds to the return value of the arg() function, for
+ *   modules that want to provide help that is specific to certain values of
+ *   wildcards in $path. For example, you could provide help for the path
+ *   'user/1' by looking for the path 'user/%' and $arg[1] == '1'. This array
+ *   should always be used rather than directly invoking arg(), because your
+ *   hook implementation may be called for other purposes besides building the
+ *   current page's help. Note that depending on which module is invoking
+ *   hook_help, $arg may contain only empty strings. Regardless, $arg[0] to
+ *   $arg[11] will always be set.
+ */
+function service_uptime_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#service_uptime':
+      
+      // Return a line-break version of the module README
+      return filter_filter('process', 1, NULL, file_get_contents(dirname(__FILE__) ."/README.txt"));
+
+    //case '':
+      //$help = '';
+      //$help .= '<p>'. t('') .'</p>';
+      //return $help;
+
+  }
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function service_uptime_init() {
+  //$path = drupal_get_path('module', 'service_uptime');
+  //drupal_add_css($path .'/service_uptime.css');
+  //drupal_add_js($path .'/service_uptime.js');
+}
+
+/**
+ * Implementation of hook_perm()
+ */
+function service_uptime_perm() {
+  return array(
+    'administer service_uptime',
+  );
+}
+
+/**
+ * Implementation of hook_menu()
+ */
+function service_uptime_menu() {
+  $items = array();
+  
+  $items['admin/reports/service-uptime'] = array(
+    'title' => 'Service Uptime',
+    'page callback' => 'service_uptime_stats_page',
+    'access arguments' => array('administer service_uptime'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'service_uptime.pages.inc',
+  );
+  $items[SERVICE_UPTIME_PATH_DRUPAL_STATS] = array(
+    'title' => 'View Stats',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+  $items[SERVICE_UPTIME_PATH_DRUPAL_SETTINGS] = array(
+    'title' => 'Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('service_uptime_admin_settings'),
+    'access arguments' => array('administer service_uptime'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'service_uptime.admin.inc',
+  );
+  
+  $items[SERVICE_UPTIME_PATH_CHECK] = array(
+    'title' => 'title',
+    'description' => 'description',
+    'page callback' => 'service_uptime_check_page',
+    'access callback' => 'service_update_is_allowed',
+    'type' => MENU_CALLBACK,
+    'file' => 'service_uptime.pages.inc',
+  );
+  return $items;
+}
+
+/**
+ * Determines if the server requesting the page is allowed to do so
+ */
+function service_update_is_allowed() {
+  return TRUE;
+  return in_array($_SERVER['HTTP_HOST'], array(
+    'serviceuptime.com',
+  ));
+}
+
+/**
+ * Implementation of hook_preprocess_page()
+ */
+function service_uptime_preprocess_page(&$vars) {
+
+}
+
+/**
+ * Implementation of hook_preprocess_node()
+ */
+function service_uptime_preprocess_node(&$vars) {
+  $node = $vars['node'];
+}
+
+
+/**
+ * Implementation of hook_views_api().
+ */
+//function service_uptime_views_api() {
+//  return array(
+//    'api' => 2,
+//    'path' => drupal_get_path('module', 'service_uptime'),
+//  );
+//}
+
+/**
+ * Implementation of hook_nodeapi()
+ * http://api.drupal.org/api/function/hook_nodeapi
+ * - "alter": the $node->content array has been rendered, so the node body or
+ *        teaser is filtered and now contains HTML. This op should only be used when
+ *        text substitution, filtering, or other raw text operations are necessary.
+ * - "delete": The node is being deleted.
+ * - "delete revision": The revision of the node is deleted. You can delete data
+ *        associated with that revision.
+ * - "insert": The node is being created (inserted in the database).
+ * - "load": The node is about to be loaded from the database. This hook can be
+ *       used to load additional data at this time.
+ * - "prepare": The node is about to be shown on the add/edit form.
+ * - "prepare translation": The node is being cloned for translation. Load
+ *       additional data or copy values from $node->translation_source.
+ * - "print": Prepare a node view for printing. Used for printer-friendly view
+ *       in book_module
+ * - "rss item": An RSS feed is generated. The module can return properties to
+ *       be added to the RSS item generated for this node. See comment_nodeapi() and
+ *       upload_nodeapi() for examples. The $node passed can also be modified to add
+ *       or remove contents to the feed item.
+ * - "search result": The node is displayed as a search result. If you want to
+ *        display extra information with the result, return it.
+ * - "presave": The node passed validation and is about to be saved. Modules may
+ *        use this to make changes to the node before it is saved to the database.
+ * - "update": The node is being updated.
+ * - "update index": The node is being indexed. If you want additional
+ *        information to be indexed which is not already visible through nodeapi
+ *        "view", then you should return it here.
+ * - "validate": The user has just finished editing the node and is trying to
+ *        preview or submit it. This hook can be used to check the node data. Errors
+ *        should be set with form_set_error().
+ * - "view": The node content is being assembled before rendering. The module
+ *        may add elements $node->content prior to rendering. This hook will be called
+ *        after hook_view(). The format of $node->content is the same as used by Forms
+ *        API. 
+ */
+function service_uptime_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+
+}
+  
+/**
+ * Return the service uptime query string for this website
+ */
+function _service_uptime_get_qs() {
+  if (($qs = variable_get('service_uptime_qs', NULL)) && preg_match(SERVICE_UPTIME_REGEX, $qs, $found) && $found[1]) {
+    return $found[1];
+  };
+  return FALSE;
+}
+
+/**
+ * Implementation of hook_theme
+ */
+function service_uptime_theme($existing, $type, $theme, $path) {
+  return array(
+    'service_uptime_configure_message' => array(
+      'arguments' => array(),
+      'file' => 'service_uptime.pages.inc',
+    ),
+  );
+}
+
+/**
+ * Get the private key (URL query k=)
+ */
+function _service_uptime_private_key() {
+  return variable_get('service_uptime_private_key', NULL);
+}
+
+/**
+ * Get the hash (Search String)
+ */
+function _service_uptime_hash($seed = NULL) {
+  $seed = empty($seed) ? _service_uptime_private_key() : $seed;
+  if ($seed) {
+    $token = md5($seed . drupal_get_private_key());
+    return $token;    
+  }
+  return FALSE;
+}
+
+/** @} */ //end of group service_uptime

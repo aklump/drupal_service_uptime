@@ -1,0 +1,76 @@
+/*$Id: _module.css 309 2011-02-04 01:05:31Z aklump $*/
+.su_h1 {
+  font-family: Georgia, Arial, "Arial Narrow", Tahoma, Verdana;
+  font-size: 16px;
+  color: #699F01;
+  font-weight: bold;
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+}
+.su_statsum {
+  border:none #666666;
+  font-family: Tahoma, Verdana, Arial;
+  font-size: 13px;
+  font-weight: normal;
+  color:#000000;
+  padding-top:2px;
+  padding-left:2px;
+  padding-right:0px;
+  padding-bottom:0px;
+}
+.su_stattd1 {
+  vertical-align: top;
+  text-align: left;
+  font-weight: bold;
+  white-space: nowrap;
+  width: 140px;
+}
+.su_stattd2 {
+  vertical-align: top;
+  text-align: left;
+}
+.su_statdettitle {
+  font-size: 14px;
+  font-weight: normal;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 3px;
+  padding-bottom: 0px;
+  font-family: "Arial Narrow", Tahoma, Verdana, Arial;
+  background-color: #efefef;
+  display: block;
+  height: 23px;
+  color: #699F01;
+}
+.su_h1_det {
+  font-size: 14px;
+  font-weight: normal;
+  font-family: "Arial Narrow", Tahoma, Verdana, Arial;
+  display: block;
+  color: #699F01;
+  margin: 0px;
+  padding: 0px;
+}
+.su_statdet {
+  border:none #666666;
+  font-family: Tahoma, Verdana, Arial;
+  font-size: 13px;
+  font-weight: normal;
+  color:#000000;
+  margin-top:0px;
+  margin-left:0px;
+  margin-right:0px;
+  margin-bottom:0px;
+  padding-top:8px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:0px;
+}
+.su_statdethead {
+  vertical-align: middle;
+  font-weight: bold;
+}
+.su_line {
+  border-bottom:1px #cecece solid;
+}

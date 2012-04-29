@@ -1,0 +1,150 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Handles installation steps for service_uptime
+ *
+ * @ingroup service_uptime
+ * @{
+ */
+
+
+/**
+ * Create the private key (store to db)
+ *
+ * This is used as the internal seed for _service_uptime_hash()
+ */
+function _service_uptime_create_private_key() {
+  variable_set('service_uptime_private_key', md5(rand(5000, 10000)));  
+}
+
+/**
+ * The install hook will fire when the module gets installed
+ */
+function service_uptime_install() {
+  //this variable will be deleted the first time the admin settings form is
+  //submitted @see service_uptime_admin_settings_submit
+  //it allows us to know that the user is in "first-run" mode
+  variable_set('service_uptime_first_run', TRUE);
+  
+  //generate a unique private key and store it
+  _service_uptime_create_private_key();
+}
+
+/*
+ * The uninstall hook will fire when the module gets uninstalled.
+ */
+function service_uptime_uninstall() {
+
+  //Clean up our entries in the variables table.
+  $result = db_query("SELECT name FROM {variable} WHERE `name` LIKE 'service_uptime%'");
+  while ($data = db_fetch_object($result)) {
+    variable_del($data->name);
+  }
+  
+  //delete blocks
+  db_query("DELETE FROM {blocks} WHERE `module` = 'service_uptime'");
+	
+  //go through all users and remove the user vars set by this module
+  $result = db_query("SELECT uid FROM {users}");
+  while ($data = db_fetch_object($result)) {
+    $account = user_load($data->uid);
+    $unset = array();
+    foreach (array_keys((array)$account) as $key) {
+      if (strpos($key, 'eqcalc_') === 0) {
+        $unset[$key] = NULL;
+      }
+    }
+    if (count($unset)) {
+      user_save($account, $unset);  
+    }
+  }	
+}
+
+/**
+ * Implementation of hook_requirements().
+ *
+ * Checks installation requirements and do status reporting.
+ * http://api.drupal.org/api/function/hook_requirements
+ * 
+ * @param phase 'install' or 'runtime': 
+ * @return A keyed array of requirements
+ */
+function service_uptime_requirements($phase) {
+  $reqs = array();
+  $t = get_t();
+  if ($phase == 'runtime') {
+    if (($check = _service_uptime_check_service()) !== TRUE) {
+      $reqs['service_uptime'] = array(
+        'title' => $t('Service Uptime'),
+        'severity' => REQUIREMENT_WARNING,
+      );
+      switch ($check) {
+        case -1:
+          $reqs['service_uptime']['description'] = theme("service_uptime_configure_message");
+          break;
+        
+        case -2:
+          $reqs['service_uptime']['description'] = $t('Your server does not support this module.');
+          break;
+
+        default:
+        case FALSE:
+          $reqs['service_uptime']['description'] = $t('Unable to connect to Service Uptime to retrieve statistics.');
+          break;
+      }
+    }
+    else {
+      $reqs['service_uptime'] = array(
+        'title' => $t('Service Uptime'),
+        'value' => $t('Connected and Ready'),
+        'severity' => REQUIREMENT_OK,
+        'description' => $t('<a href="@url">View</a> your statistics.', array(
+          '@url' => url(SERVICE_UPTIME_PATH_DRUPAL_STATS),
+        )),
+      );
+    }
+  }
+  return $reqs;
+}
+
+/**
+ * Checks to make sure the service is configured and able to report stats
+ */
+function _service_uptime_check_service() {
+  if (!($qs = _service_uptime_get_qs()) || !variable_get('service_uptime_private_key', NULL)) {
+    return -1;
+  }
+  elseif(intval(get_cfg_var('allow_url_fopen')) && function_exists('file_get_contents')) {
+    if(!($content = @file_get_contents(SERVICE_UPTIME_URL_STATS . $qs))) {
+        return FALSE;
+    }
+    else {
+        return TRUE;
+    }
+  }
+  elseif(intval(get_cfg_var('allow_url_fopen')) && function_exists('file')) {
+    if(!($content = @file(SERVICE_UPTIME_URL_STATS . $qs))) {
+        return FALSE;
+    }
+    else {
+        return TRUE;
+    }
+  }
+  elseif(function_exists('curl_init')) {
+    $ch = curl_init (SERVICE_UPTIME_URL_STATS . $qs);
+    curl_setopt ($ch, CURLOPT_HEADER, 0);
+    curl_exec ($ch);
+
+    if(curl_error($ch))
+        return FALSE;
+    curl_close ($ch);
+  }
+  else {
+    return -2;
+  }
+  return TRUE;
+}
+
+/** @} */ //end of group service_uptime

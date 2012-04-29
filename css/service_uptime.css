@@ -1,0 +1,12 @@
+/*$Id$*/
+.service-uptime-signup {
+  font-size: 2em;
+  margin: 1em;
+}
+
+.service-uptime-signup sup,
+.service-uptime-footnote {
+  font-style: italic;
+  font-size: 12px;
+  color: #666;
+}
