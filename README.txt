@@ -1,5 +1,3 @@
-/* $Id$ */
-
 SUMMARY: This module integrates with both free and paid accounts at
 www.serviceuptime.com. It provides an easy way to view your statistics from
 within your Drupal website.
