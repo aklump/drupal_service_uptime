@@ -1,8 +1,8 @@
 <?php
-// $Id$ 
+// $Id$
 
-/** 
- * @file 
+/**
+ * @file
  * Base module file for service_uptime
  *
  * @defgroup service_uptime Service Uptime Module
@@ -54,7 +54,7 @@ define('SERVICE_UPTIME_PATH_CHECK', 'service-uptime/check');
 /**
  * Get the affiliate or non-affiliated link to service uptime
  */
-function _service_uptime_url() {  
+function _service_uptime_url() {
   $url = 'http://www.ServiceUptime.com/';
   //@todo add in affiliated link checking
   if (1) {
@@ -76,36 +76,10 @@ function _service_uptime_l($title = '', $url = '') {
  * Implementation of hook_enable()
  */
 function service_uptime_enable() {
-  
+
   //message about module settings
   //@todo this did not work; fix
   drupal_set_message(theme("service_uptime_configure_message"));
-
-  //make a note of who enabled it
-  global $user;
-  watchdog('service_uptime', 'service_uptime module enabled by %user (uid: %uid)', array('%user' => $user->name, '%uid' => $user->uid));
-  
-  //change the system weight for the module, if needed
-  //$weight = db_result(db_query_range("SELECT weight FROM {system} WHERE name = 'fieldgroup'", 1));
-  //db_query("UPDATE {system} SET `weight` = ". ++$weight ." WHERE name = 'service_uptime'"); //don't do alimit on this query in case there are more than one entries?
-}
-
-/**
- * Implementation of hook_disable()
- */
-function service_uptime_disable() {
-  //make a note of who disabled it
-  global $user;
-  watchdog('service_uptime', 'service_uptime module disabled by %user (uid: %uid)', array('%user' => $user->name, '%uid' => $user->uid));
-}
-
-/**
- * Implementation of hook_init()
- */
-function service_uptime_init() {
-  //$path = drupal_get_path('module', 'service_uptime');
-  //drupal_add_css($path .'/service_uptime.css');
-  //drupal_add_js($path .'/service_uptime.js');
 }
 
 /**
@@ -151,7 +125,7 @@ function service_uptime_help($path, $arg) {
 function service_uptime_permission() {
   return array(
     'administer service_uptime' => array(
-      'title' => t('Administer service_uptime'), 
+      'title' => t('Administer service_uptime'),
       'description' => t('Perform administration tasks for service_uptime.'),
     ),
   );
@@ -162,7 +136,7 @@ function service_uptime_permission() {
  */
 function service_uptime_menu() {
   $items = array();
-  
+
   $items['admin/reports/service-uptime'] = array(
     'title' => 'Service Uptime',
     'page callback' => 'service_uptime_stats_page',
@@ -183,7 +157,7 @@ function service_uptime_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'service_uptime.admin.inc',
   );
-  
+
   $items[SERVICE_UPTIME_PATH_CHECK] = array(
     'title' => 'title',
     'description' => 'description',
@@ -204,7 +178,7 @@ function service_update_is_allowed() {
     'serviceuptime.com',
   ));
 }
-  
+
 /**
  * Return the service uptime query string for this website
  */
@@ -241,7 +215,7 @@ function _service_uptime_hash($seed = NULL) {
   $seed = empty($seed) ? _service_uptime_private_key() : $seed;
   if ($seed) {
     $token = md5($seed . drupal_get_private_key());
-    return $token;    
+    return $token;
   }
   return FALSE;
 }

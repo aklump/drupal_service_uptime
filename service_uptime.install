@@ -4,9 +4,9 @@
 /**
  * @file
  * Handles installation steps for service_uptime
- * 
+ *
  * @ingroup func_search
- * @{ 
+ * @{
  */
 
 /**
@@ -15,7 +15,7 @@
  * This is used as the internal seed for _service_uptime_hash()
  */
 function _service_uptime_create_private_key() {
-  variable_set('service_uptime_private_key', md5(rand(5000, 10000)));  
+  variable_set('service_uptime_private_key', md5(rand(5000, 10000)));
 }
 
 /**
@@ -26,7 +26,7 @@ function service_uptime_install() {
   //submitted @see service_uptime_admin_settings_submit
   //it allows us to know that the user is in "first-run" mode
   variable_set('service_uptime_first_run', TRUE);
-  
+
   //generate a unique private key and store it
   _service_uptime_create_private_key();
 }
@@ -35,14 +35,14 @@ function service_uptime_install() {
  * The uninstall hook will fire when the module gets uninstalled.
  */
 function service_uptime_uninstall() {
-  
+
   //Clean up our entries in the variables table.
   if ($result = db_query("SELECT name FROM {variable} WHERE `name` LIKE 'service_uptime%'")) {
     foreach($result as $data) {
       variable_del($data->name);
-    }    
-  }	
-  
+    }
+  }
+
   //delete blocks
   db_query("DELETE FROM {block} WHERE `module` = 'service_uptime'");
 }
@@ -52,8 +52,8 @@ function service_uptime_uninstall() {
  *
  * Checks installation requirements and do status reporting.
  * http://api.drupal.org/api/function/hook_requirements
- * 
- * @param phase 'install' or 'runtime': 
+ *
+ * @param phase 'install' or 'runtime':
  * @return A keyed array of requirements
  */
 function service_uptime_requirements($phase) {
@@ -69,7 +69,7 @@ function service_uptime_requirements($phase) {
         case -1:
           $reqs['service_uptime']['description'] = theme("service_uptime_configure_message");
           break;
-        
+
         case -2:
           $reqs['service_uptime']['description'] = $t('Your server does not support this module.');
           break;
@@ -120,6 +120,7 @@ function _service_uptime_check_service() {
   elseif(function_exists('curl_init')) {
     $ch = curl_init (SERVICE_UPTIME_URL_STATS . $qs);
     curl_setopt ($ch, CURLOPT_HEADER, 0);
+    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_exec ($ch);
 
     if(curl_error($ch))
