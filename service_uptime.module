@@ -73,53 +73,6 @@ function _service_uptime_l($title = '', $url = '') {
 }
 
 /**
- * Implementation of hook_enable()
- */
-function service_uptime_enable() {
-
-  //message about module settings
-  //@todo this did not work; fix
-  drupal_set_message(theme("service_uptime_configure_message"));
-}
-
-/**
- * Implementation of hook_help()
- *
- * http://api.drupal.org/api/function/hook_help
- *
- * @param string $path
- *   The router menu path, as defined in hook_menu(), for the help that is
- *   being requested; e.g., 'admin/node' or 'user/edit'. If the router path
- *   includes a % wildcard, then this will appear in $path; for example, node
- *   pages would have $path equal to 'node/%' or 'node/%/view'. Your hook
- *   implementation may also be called with special descriptors after a "#" sign.
- * @param array $arg
- *   An array that corresponds to the return value of the arg() function, for
- *   modules that want to provide help that is specific to certain values of
- *   wildcards in $path. For example, you could provide help for the path
- *   'user/1' by looking for the path 'user/%' and $arg[1] == '1'. This array
- *   should always be used rather than directly invoking arg(), because your
- *   hook implementation may be called for other purposes besides building the
- *   current page's help. Note that depending on which module is invoking
- *   hook_help, $arg may contain only empty strings. Regardless, $arg[0] to
- *   $arg[11] will always be set.
- */
-function service_uptime_help($path, $arg) {
-  switch ($path) {
-    case 'admin/help#service_uptime':
-      $help = '';
-      $help .= check_markup(file_get_contents(drupal_get_path('module', 'service_uptime') .'/README.txt'), 'plain_text');
-      return $help;
-
-    //case '':
-      //$help = '';
-      //$help .= '<p>'. t('') .'</p>';
-      //return $help;
-
-  }
-}
-
-/**
  * Implementation of hook_perm()
  */
 function service_uptime_permission() {
