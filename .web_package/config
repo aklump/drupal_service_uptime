@@ -1,0 +1,7 @@
+master = "7.x-1.x 6.x-1.x"
+develop = "7.x-1.x 6.x-1.x"
+remote = origin
+create_tags = minor
+push_tags = auto
+push_master = ask
+push_develop = no
