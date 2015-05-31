@@ -1,6 +1,4 @@
 <?php
-// $Id$
-
 /**
  * @file
  * Handles installation steps for service_uptime

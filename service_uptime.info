@@ -1,6 +1,5 @@
-; $Id$
 name = Service Uptime 
 description = Integrates Drupal with the website monitoring service at serviceuptime.com
-package = Other
+package = "In the Loft Studios"
 core = 7.x
-version = 7.x-1.1.3
+version = 7.x-1.2

@@ -1,6 +1,4 @@
 <?php
-// $Id$
-
 /**
  * @file
  * Handles the extra page functions, loaded as needed
