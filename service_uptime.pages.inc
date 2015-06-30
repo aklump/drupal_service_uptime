@@ -21,8 +21,10 @@ function service_uptime_stats_page() {
     $output .= theme('service_uptime_configure_message');
   }
   else {
+    $url = SERVICE_UPTIME_URL_STATS . $qs;
+    
     if(intval(get_cfg_var('allow_url_fopen')) && function_exists('file_get_contents')) {
-      if(!($content = @file_get_contents(SERVICE_UPTIME_URL_STATS . $qs))) {
+      if(!($content = @file_get_contents($url))) {
           $output .= t('Error processing request');
       }
       else {
@@ -30,7 +32,7 @@ function service_uptime_stats_page() {
       }
     }
     elseif(intval(get_cfg_var('allow_url_fopen')) && function_exists('file')) {
-      if(!($content = @file(SERVICE_UPTIME_URL_STATS . $qs))) {
+      if(!($content = @file($url))) {
           $output .= t('Error processing request');
       }
       else {
@@ -38,7 +40,7 @@ function service_uptime_stats_page() {
       }
     }
     elseif(function_exists('curl_init')) {
-      $ch = curl_init (SERVICE_UPTIME_URL_STATS . $qs);
+      $ch = curl_init ($url);
       curl_setopt ($ch, CURLOPT_HEADER, 0);
       curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
       curl_exec ($ch);

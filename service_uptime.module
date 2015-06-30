@@ -17,7 +17,7 @@ define('SERVICE_UPTIME_URL_STATS', 'http://www.serviceuptime.com/users/servicest
  * @var SERVICE_UPTIME_REGEX
  * This is the regex for checking user token links
  */
-define('SERVICE_UPTIME_REGEX', '/^https?:\/\/www\.serviceuptime.com\/users\/(uptime)?monitoring\.php(\?(S=\w+)(\&(Id=\d+))?)$/');
+define('SERVICE_UPTIME_REGEX', '/^https?:\/\/www\.serviceuptime.com\/users\/(?:uptime)?monitoring\.php(\?(S=\w+)\&(Id=\d+))$/');
 
 /**
  * @var SERVICE_UPTIME_URL_STATS
@@ -41,7 +41,7 @@ define('SERVICE_UPTIME_URL_AFFILIATE_EXPLANATION', 'https://www.serviceuptime.co
  * @var SERVICE_UPTIME_EXAMPLE_LINK
  * The example format of a link
  */
-define('SERVICE_UPTIME_EXAMPLE_LINK', 'https://www.serviceuptime.com/users/monitoring.php?S=a07db1b0170f92d081fec95806daef7f');
+define('SERVICE_UPTIME_EXAMPLE_LINK', 'https://www.serviceuptime.com/users/monitoring.php?S=a07db1b0170f92d081fec95806daef7f&Id=12259');
 
 /**
  * @var SERVICE_UPTIME_PATH_CHECK

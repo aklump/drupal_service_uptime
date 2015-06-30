@@ -97,13 +97,13 @@ function service_uptime_admin_settings() {
   
   $form['service_uptime_qs'] = array(
     '#type' => 'textfield',
-    '#description' => t('Enter your statistics link.  This comes from your Service Uptime account from !link. It will look like <strong>!this</strong>', array(
+    '#description' => t('Enter your statistics link.  This comes from your Service Uptime account from !link. It will look like <strong>!this</strong>.  You will have to look inside the Option 2 PHP option.  You also will have to enable public statistics.', array(
         '!link' => l(t('this page'), 'https://www.serviceuptime.com/users/openstat.php'),
         '!this' => SERVICE_UPTIME_EXAMPLE_LINK,
       )),
     '#title' => t('Service Uptime Statistics Link'),
     '#default_value' => variable_get('service_uptime_qs', NULL),
-    '#required' => TRUE,
+    '#required' => FALSE,
     '#size' => 120,
   );
   
