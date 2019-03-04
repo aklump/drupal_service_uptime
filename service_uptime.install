@@ -71,7 +71,7 @@ function service_uptime_requirements($phase) {
  * Checks to make sure the service is configured and able to report stats
  */
 function _service_uptime_check_service() {
-  if (!($qs = _service_uptime_get_qs()) || !variable_get('service_uptime_private_key', NULL)) {
+  if (!($qs = service_uptime_get_qs()) || !variable_get('service_uptime_private_key', NULL)) {
     return -1;
   }
   elseif (intval(get_cfg_var('allow_url_fopen')) && function_exists('file_get_contents')) {

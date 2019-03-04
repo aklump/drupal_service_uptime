@@ -17,9 +17,9 @@ function service_uptime_admin_settings() {
     'type' => 'file',
     'data' => drupal_get_path('module', 'service_uptime') . '/css/service_uptime.css',
   );
-  $qs = variable_get('service_uptime_qs', NULL);
+  $query_string = service_uptime_get_qs();
 
-  if (!$qs) {
+  if (!$query_string) {
     $form['singup'] = array(
       '#markup' => t('<h2><a href="!url">Get your free account &rarr;</a></h2>', [
         '!url' => service_uptime_url(),
@@ -27,20 +27,14 @@ function service_uptime_admin_settings() {
     );
   }
 
-  if ($hash = _service_uptime_hash()) {
-
+  if ($hash = _service_uptime_get_public_hash()) {
     $form['edit_service'] = array(
       '#type' => 'fieldset',
       '#title' => t('Monitor Settings'),
       '#description' => t('Use these values when adding your "website" monitor to your Service Uptime account.'),
       '#weight' => -10,
       '#collapsible' => TRUE,
-      '#collapsed' => !empty($qs),
-    );
-
-    $form['edit_service']['new_service'] = array(
-      '#type' => 'markup',
-      '#value' => '<div>' . t('<a href="!url">Add</a> a new <em>web page</em> service, using the following settings:', array('!url' => service_uptime_url('/users/services-edit.php'))) . '</div>',
+      '#collapsed' => !empty($query_string),
     );
 
     $form['edit_service']['name'] = array(
@@ -88,7 +82,7 @@ function service_uptime_admin_settings() {
       '!this' => SERVICE_UPTIME_EXAMPLE_LINK,
     )),
     '#title' => t('Service Uptime Statistics Link'),
-    '#default_value' => $qs,
+    '#default_value' => $query_string,
     '#required' => FALSE,
     '#size' => 120,
   );
@@ -123,7 +117,7 @@ function service_uptime_admin_settings() {
  */
 function service_uptime_admin_settings_validate($form, &$form_state) {
   if (!empty($form_state['values']['service_uptime_qs']) && !preg_match(SERVICE_UPTIME_REGEX, $form_state['values']['service_uptime_qs'])) {
-    form_set_error('service_uptime_qs', t('The format of your token is incorrect.  It should look like this: <strong>@example</strong>', array(
+    form_set_error('service_uptime_qs', t('The format of your link is incorrect.  It should look like this: <strong>@example</strong>', array(
       '@example' => SERVICE_UPTIME_EXAMPLE_LINK,
     )));
   }

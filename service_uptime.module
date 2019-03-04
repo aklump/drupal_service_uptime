@@ -112,8 +112,10 @@ function service_uptime_theme($existing, $type, $theme, $path) {
 
 /**
  * Return the service uptime query string for this website
+ *
+ * This is a portion of the Service Uptime Statistics Link entered in settings.
  */
-function _service_uptime_get_qs() {
+function service_uptime_get_qs() {
   if (($qs = variable_get('service_uptime_qs', NULL)) && preg_match(SERVICE_UPTIME_REGEX, $qs, $found) && $found[1]) {
     return $found[1];
   };
@@ -122,7 +124,7 @@ function _service_uptime_get_qs() {
 }
 
 /**
- * Return a link to a service uptime URL.
+ * Create an absolute URL to service uptime (with affiliate link).
  *
  * @param string $path
  *   The path at service uptime.
@@ -131,6 +133,7 @@ function _service_uptime_get_qs() {
  *   The full URL with affiliate link when appropriate.
  */
 function service_uptime_url($path = '/') {
+  $options = [];
   if ($path === '/') {
     $options['query']['aff'] = 'R779';
   }
@@ -140,8 +143,12 @@ function service_uptime_url($path = '/') {
 
 /**
  * Get the hash (Search String)
+ *
+ * @param null $seed
+ *
+ * @return bool|string
  */
-function _service_uptime_hash($seed = NULL) {
+function _service_uptime_get_public_hash($seed = NULL) {
   $seed = empty($seed) ? variable_get('service_uptime_private_key', NULL) : $seed;
   if ($seed) {
     $token = md5($seed . drupal_get_private_key());

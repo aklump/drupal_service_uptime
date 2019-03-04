@@ -2,9 +2,6 @@
 /**
  * @file
  * Handles the extra page functions, loaded as needed.
- *
- * @ingroup service_uptime
- * @{
  */
 
 /**
@@ -17,7 +14,7 @@ function service_uptime_stats_page() {
 
   $output = '';
 
-  if (!($qs = _service_uptime_get_qs())) {
+  if (!($qs = service_uptime_get_qs())) {
     $output .= theme('service_uptime_configure_message');
   }
   else {
@@ -86,26 +83,21 @@ function theme_service_uptime_configure_message() {
  * a 404.
  */
 function service_uptime_check_page() {
-  $output = '';
-  $seed = isset($_GET['s']) ? $_GET['s'] : NULL;
-
-  if (empty($seed) || _service_uptime_hash($seed) != _service_uptime_hash()) {
-    return MENU_NOT_FOUND;
-  }
-
   // This is used to force a failure; it is set in the admin settings page.
-  elseif (variable_get('service_uptime_force_failure', NULL)) {
+  if (variable_get('service_uptime_force_failure', NULL)) {
     variable_del('service_uptime_force_failure');
 
     return MENU_NOT_FOUND;
   }
-
-  // This is just a way to obfuscate a bit more; adding time stuff.
-  $output .= _service_uptime_hash(time()) . _service_uptime_hash($seed) . _service_uptime_hash(time() / 2);
-
+  $seed = isset($_GET['s']) ? $_GET['s'] : NULL;
+  if (empty($seed) || _service_uptime_get_public_hash($seed) != _service_uptime_get_public_hash()) {
+    return MENU_NOT_FOUND;
+  }
   drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
-  echo($output);
+  echo(implode('', [
+    _service_uptime_get_public_hash(time()),
+    _service_uptime_get_public_hash($seed),
+    _service_uptime_get_public_hash(time() / 2),
+  ]));
   drupal_exit();
 }
-
-/** @} */ //end of group service_uptime.
