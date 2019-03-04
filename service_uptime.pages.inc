@@ -106,7 +106,8 @@ function service_uptime_check_page() {
   $output .= _service_uptime_hash(time()) . _service_uptime_hash($seed) . _service_uptime_hash(time() / 2);
 
   drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
-  exit($output);
+  echo($output);
+  drupal_exit();
 }
 
 /** @} */ //end of group service_uptime.

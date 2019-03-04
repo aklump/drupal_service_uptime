@@ -36,13 +36,6 @@ define('SERVICE_UPTIME_PATH_DRUPAL_STATS', 'admin/reports/service-uptime/stats')
 define('SERVICE_UPTIME_PATH_DRUPAL_SETTINGS', 'admin/reports/service-uptime/settings');
 
 /**
- * The url to the affiliate program info.
- *
- * @var SERVICE_UPTIME_URL_AFFILIATE_EXPLANATION
- */
-define('SERVICE_UPTIME_URL_AFFILIATE_EXPLANATION', 'https://www.serviceuptime.com/affiliate.php');
-
-/**
  * The example format of a link.
  *
  * @var SERVICE_UPTIME_EXAMPLE_LINK
@@ -66,13 +59,17 @@ define('SERVICE_UPTIME_PATH_CHECK', 'service-uptime/check');
  */
 function _service_uptime_l($title = '', $path = '/') {
   $title = empty($title) ? 'www.ServiceUptime.com' : $title;
-
-  return l($title, 'http://www.serviceuptime.com/' . trim('/', $path), array(
-    'query' => array('aff' => 'R779'),
+  $options = [
+    'html' => TRUE,
     'attributes' => array(
       'onclick' => 'window.open(this.href); return false;',
     ),
-  ));
+  ];
+  if ($path === '/') {
+    $options['query']['aff'] = 'R779';
+  }
+
+  return l($title, 'http://www.serviceuptime.com/' . trim($path, '/'), $options);
 }
 
 /**
