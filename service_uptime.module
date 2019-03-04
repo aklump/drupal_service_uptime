@@ -8,68 +8,71 @@
  */
 
 /**
+ * This is the base url for stats.
+ *
  * @var SERVICE_UPTIME_URL_STATS
- * This is the base url for stats
  */
 define('SERVICE_UPTIME_URL_STATS', 'http://www.serviceuptime.com/users/servicestat.php');
 
 /**
+ * This is the regex for checking user token links.
+ *
  * @var SERVICE_UPTIME_REGEX
- * This is the regex for checking user token links
  */
 define('SERVICE_UPTIME_REGEX', '/^https?:\/\/www\.serviceuptime.com\/users\/(?:uptime)?monitoring\.php(\?(S=\w+)\&(Id=\d+))$/');
 
 /**
+ * The url to be used to link to stats page.
+ *
  * @var SERVICE_UPTIME_URL_STATS
- * The url to be used to link to stats page
  */
 define('SERVICE_UPTIME_PATH_DRUPAL_STATS', 'admin/reports/service-uptime/stats');
 
 /**
+ * The internal path to settings page.
+ *
  * @var SERVICE_UPTIME_PATH_DRUPAL_SETTINGS
- * The internal path to settings page
  */
 define('SERVICE_UPTIME_PATH_DRUPAL_SETTINGS', 'admin/reports/service-uptime/settings');
 
 /**
+ * The url to the affiliate program info.
+ *
  * @var SERVICE_UPTIME_URL_AFFILIATE_EXPLANATION
- * The url to the affiliate program info
  */
 define('SERVICE_UPTIME_URL_AFFILIATE_EXPLANATION', 'https://www.serviceuptime.com/affiliate.php');
 
 /**
+ * The example format of a link.
+ *
  * @var SERVICE_UPTIME_EXAMPLE_LINK
- * The example format of a link
  */
 define('SERVICE_UPTIME_EXAMPLE_LINK', 'https://www.serviceuptime.com/users/monitoring.php?S=a07db1b0170f92d081fec95806daef7f&Id=12259');
 
 /**
+ * The internal drupal path to the check url for SU to ping.
+ *
  * @var SERVICE_UPTIME_PATH_CHECK
- * The internal drupal path to the check url for SU to ping
  */
 define('SERVICE_UPTIME_PATH_CHECK', 'service-uptime/check');
 
 /**
- * Get the affiliate or non-affiliated link to service uptime
- */
-function _service_uptime_url() {
-  $url = 'http://www.ServiceUptime.com/';
-  //@todo add in affiliated link checking
-  if (1) {
-    $url .= '?aff=R779';
-  }
-
-  return $url;
-}
-
-/**
  * Get an <a> tag with the correctly formatted affiliate link
+ *
+ * @param string $title
+ * @param string $url
+ *
+ * @return string
  */
-function _service_uptime_l($title = '', $url = '') {
+function _service_uptime_l($title = '', $path = '/') {
   $title = empty($title) ? 'www.ServiceUptime.com' : $title;
-  $url = empty($url) ? _service_uptime_url() : $url;
 
-  return l($title, $url, array('attributes' => array('onclick' => 'window.open(this.href); return false;')));
+  return l($title, 'http://www.serviceuptime.com/' . trim('/', $path), array(
+    'query' => array('aff' => 'R779'),
+    'attributes' => array(
+      'onclick' => 'window.open(this.href); return false;',
+    ),
+  ));
 }
 
 /**
@@ -115,23 +118,12 @@ function service_uptime_menu() {
     'title' => 'title',
     'description' => 'description',
     'page callback' => 'service_uptime_check_page',
-    'access callback' => 'service_update_is_allowed',
+    'access callback' => TRUE,
     'type' => MENU_CALLBACK,
     'file' => 'service_uptime.pages.inc',
   );
 
   return $items;
-}
-
-/**
- * Determines if the server requesting the page is allowed to do so
- */
-function service_update_is_allowed() {
-  return TRUE;
-
-  return in_array($_SERVER['HTTP_HOST'], array(
-    'serviceuptime.com',
-  ));
 }
 
 /**

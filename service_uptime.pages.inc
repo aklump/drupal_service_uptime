@@ -1,14 +1,14 @@
 <?php
 /**
  * @file
- * Handles the extra page functions, loaded as needed
+ * Handles the extra page functions, loaded as needed.
  *
  * @ingroup service_uptime
  * @{
  */
 
 /**
- * Generate the statistics page
+ * Generate the statistics page.
  */
 function service_uptime_stats_page() {
   if (variable_get('service_uptime_stock_css', TRUE)) {
@@ -56,11 +56,11 @@ function service_uptime_stats_page() {
         '@link' => _service_uptime_l(),
       ));
     }
-    //remove the footer
+    // Remove the footer.
     $output = preg_replace('/(<TR>.*<\/TR>\s*)(<\/TABLE>)/i', '\2', $output);
 
     $output .= '<div class="footer">' . t('For more details log in to your account at !link', array(
-        '!link' => _service_uptime_l(NULL, 'https://www.serviceuptime.com/users/services.php'),
+        '!link' => _service_uptime_l(NULL, '/users/services.php'),
       )) . '</div><!-- /.footer -->' . "\n";
   }
 
@@ -73,42 +73,40 @@ function service_uptime_stats_page() {
  * @ingroup themeable
  */
 function theme_service_uptime_configure_message() {
-  $output = '';
-  $output .= t('You have not yet configured your Service Uptime settings; please <a href="@url">click here</a>.', array(
-      '@url' => url(SERVICE_UPTIME_PATH_DRUPAL_SETTINGS),
-    )) . "\n";
+  return t('You have not yet configured your Service Uptime settings; please <a href="@url">click here</a>.', array(
+    '@url' => url(SERVICE_UPTIME_PATH_DRUPAL_SETTINGS),
+  ));
 
   return $output;
 }
 
 /**
- * Render the page for the service uptime check
+ * Render the page for the service uptime check.
  *
  * This page will take $_GET['s'] as the seed and return a public key based on
  * that seed However if that return doesn't equal the private key then you get
- * a 404
- *
+ * a 404.
  */
 function service_uptime_check_page() {
   $output = '';
   $seed = isset($_GET['s']) ? $_GET['s'] : NULL;
 
   if (empty($seed) || _service_uptime_hash($seed) != _service_uptime_hash()) {
-    return drupal_not_found();
+    return MENU_NOT_FOUND;
   }
 
-  //this is used to force a failure; it is set in the admin settings page
+  // This is used to force a failure; it is set in the admin settings page.
   elseif (variable_get('service_uptime_force_failure', NULL)) {
     variable_del('service_uptime_force_failure');
 
-    return drupal_not_found();
+    return MENU_NOT_FOUND;
   }
 
-  //this is just a way to obfuscate a bit more; adding time stuff
+  // This is just a way to obfuscate a bit more; adding time stuff.
   $output .= _service_uptime_hash(time()) . _service_uptime_hash($seed) . _service_uptime_hash(time() / 2);
 
   drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
   exit($output);
 }
 
-/** @} */ //end of group service_uptime
+/** @} */ //end of group service_uptime.

@@ -15,11 +15,11 @@
  */
 
 function service_uptime_admin_settings() {
-
-  drupal_add_css(drupal_get_path('module', 'service_uptime') . '/css/service_uptime.css');
-
   $form = array();
-
+  $form['#attached']['css'][] = array(
+    'type' => 'file',
+    'data' => drupal_get_path('module', 'service_uptime') . '/css/service_uptime.css',
+  );
   $first_run = variable_get('service_uptime_first_run', FALSE);
 
   if ($first_run) {
@@ -34,23 +34,7 @@ function service_uptime_admin_settings() {
     );
   }
 
-  //if (!$first_run && !variable_get('service_uptime_private_key', '')) {
-  //  _service_uptime_create_private_key();
-  //  drupal_set_message(t('Your Search String has been regenerated, please <strong>immediately update</strong> your link at !link as appropriate.', array(
-  //    '!link' => _service_uptime_l(NULL, 'https://www.serviceuptime.com/users/services.php'),
-  //  )), 'warning');
-  //}
-  //$form['service_uptime_private_key'] = array(
-  //  '#type' => 'textfield',
-  //  '#title' => t('Private Key'),
-  //  '#default_value' => variable_get('service_uptime_private_key', ''),
-  //  '#required' => TRUE,
-  //  '#size' => 60,
-  //  '#attributes' => array('readonly' => TRUE),
-  //);
-
   if ($hash = _service_uptime_hash()) {
-
     $form['edit_service'] = array(
       '#type' => 'fieldset',
       '#title' => t('Service Settings'),
@@ -61,12 +45,9 @@ function service_uptime_admin_settings() {
     $form['edit_service']['new_service'] = array(
       '#type' => 'markup',
       '#value' => '<div>' . t('!link a new <em>web page</em> service, using the following settings:', array(
-          '!link' => _service_uptime_l('Add', 'https://www.serviceuptime.com/users/services-edit.php'),
+          '!link' => _service_uptime_l('Add', '/users/services-edit.php'),
         )) . '</div>',
     );
-    //$form['edit_service_new_service'] = array(
-    //  '#markup' => t('Add a new webpage service using the following settings'),
-    //);
 
     $form['edit_service']['page_url'] = array(
       '#type' => 'textfield',
@@ -131,7 +112,7 @@ function service_uptime_admin_settings_validate($form, &$form_state) {
 }
 
 /**
- * Form submission handler
+ * Form submission handler.
  */
 function service_uptime_admin_settings_submit($form, &$form_state) {
   variable_del('service_uptime_first_run');
