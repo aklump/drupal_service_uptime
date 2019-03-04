@@ -1,19 +1,16 @@
 <?php
+
 /**
  * @file
  * Administration page callbacks for the service_uptime module.
- *
- * @ingroup service_uptime
- * @{
  */
 
 /**
  * Form builder. Configure my_module.
  *
  * @ingroup forms
- * @see system_settings_form().
+ * @see system_settings_form()
  */
-
 function service_uptime_admin_settings() {
   $form = array();
   $form['#attached']['css'][] = array(
@@ -24,9 +21,9 @@ function service_uptime_admin_settings() {
 
   if (!$qs) {
     $form['singup'] = array(
-      '#prefix' => '<h2>',
-      '#suffix' => '</h2>',
-      '#markup' => _service_uptime_l('Get your free account &rarr;'),
+      '#markup' => t('<h2><a href="!url">Get your free account &rarr;</a></h2>', [
+        '!url' => service_uptime_url(),
+      ]),
     );
   }
 
@@ -43,9 +40,7 @@ function service_uptime_admin_settings() {
 
     $form['edit_service']['new_service'] = array(
       '#type' => 'markup',
-      '#value' => '<div>' . t('!link a new <em>web page</em> service, using the following settings:', array(
-          '!link' => _service_uptime_l('Add', '/users/services-edit.php'),
-        )) . '</div>',
+      '#value' => '<div>' . t('<a href="!url">Add</a> a new <em>web page</em> service, using the following settings:', array('!url' => service_uptime_url('/users/services-edit.php'))) . '</div>',
     );
 
     $form['edit_service']['name'] = array(
@@ -67,7 +62,7 @@ function service_uptime_admin_settings() {
       '#title' => t('Page Url'),
       '#value' => ($url = url(SERVICE_UPTIME_PATH_CHECK, array(
         'absolute' => TRUE,
-        'query' => array('s' => _service_uptime_private_key()),
+        'query' => array('s' => variable_get('service_uptime_private_key', NULL)),
       ))),
       '#attributes' => array('readonly' => TRUE),
       '#field_suffix' => l(t('Test &rarr;'), $url, array(
@@ -88,9 +83,8 @@ function service_uptime_admin_settings() {
 
   $form['service_uptime_qs'] = array(
     '#type' => 'textfield',
-    '#description' => t('<p>Enter your statistics link.  Click !link and find the "Direct Link".  Copy it here. It will resemble <strong>!this</strong>.</p><p>You also will have to !public public statistics.</p>', array(
-      '!link' => _service_uptime_l('this page', '/users/openstat.php'),
-      '!public' => _service_uptime_l('enable', '/users/openstatmulti.php'),
+    '#description' => t('<p>Enter your statistics link.  Click !link and find the "Direct Link".  Copy it here. It will resemble <strong><a href="!url">this page</a></strong>.</p><p>You also will have to <a href="!public">enable</a> public statistics.</p>', array(
+      '!url' => service_uptime_url('/users/openstat.php'),
       '!this' => SERVICE_UPTIME_EXAMPLE_LINK,
     )),
     '#title' => t('Service Uptime Statistics Link'),
@@ -134,5 +128,3 @@ function service_uptime_admin_settings_validate($form, &$form_state) {
     )));
   }
 }
-
-/** @} */ //end of group service_uptime

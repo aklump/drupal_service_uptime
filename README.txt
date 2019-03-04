@@ -3,25 +3,12 @@
 Summary
 
    This module integrates with both free and paid accounts at
-   www.serviceuptime.com. It provides an easy way to view your statistics
-   from within your Drupal website.
-
-Support the Author
-
-   When you sign up for your account, if you would like to support the
-   author of this module, please use my affiliate link. You may read about
-   how this benefits me here: http://www.serviceuptime.com/affiliate.php
-
-   The affiliate link is provided from within the Drupal UI anywhere you
-   see a link to www.serviceuptime.com.
-
-   If you would prefer not to use my affiliate link, then please just go
-   to http://www.serviceuptime.com and proceed with the registration
-   process.
+   [1]www.serviceuptime.com. It provides an easy way to view your
+   statistics from within your Drupal website.
 
 Contributing
 
-   If you find this project useful... please consider [1]making a
+   If you find this project useful... please consider [2]making a
    donation.
 
 Installation
@@ -31,19 +18,26 @@ Installation
 
 Configuration
 
-     * Visit admin/reports/service-uptime
-     * Click on the link to sign up for your serviceuptime.com account.
-     * Add a service of type: web page
-     * Copy the settings for Page URL and Search String into your service
-     * Update the Statistics link from your new account.
-     * Test your connection and site back and enjoy
-     __________________________________________________________________
+     * [3]Sign up for a free Service Uptime account.
+     * Add a monitor using the values shown at
+       /admin/reports/service-uptime.
+     * Add additional configuration to your monitor as desired.
+     * Test your connection from the Service Uptime control panel.
 
-   CONTACT: In the Loft Studios Aaron Klump - Web Developer PO Box 29294
-   Bellingham, WA 98228-1294 aim: theloft101 skype: intheloftstudios
+Contact The Developer
 
-   http://www.InTheLoftStudios.com
+   In the Loft Studios
+   Aaron Klump - Web Developer
+   sourcecode@intheloftstudios.com
+   360.690.6432
+   PO Box 29294 Bellingham, WA 98228-1294
+   skype: intheloftstudios
+
+   http://www.intheloftstudios.com/
+   https://github.com/aklump
 
 References
 
-   1. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4E5KZHDQCEUV8&item_name=Gratitude%20for%20aklump%2Fservice_uptime
+   1. http://www.serviceuptime.com/?aff=R779
+   2. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4E5KZHDQCEUV8&item_name=Gratitude%20for%20aklump%2Fservice_uptime
+   3. http://www.serviceuptime.com/?aff=R779

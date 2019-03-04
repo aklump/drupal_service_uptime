@@ -1,7 +1,7 @@
 ## Summary
 
 This module integrates with both free and paid accounts at
-www.serviceuptime.com. It provides an easy way to view your statistics from
+[www.serviceuptime.com](http://www.serviceuptime.com/?aff=R779). It provides an easy way to view your statistics from
 within your Drupal website.
 
 ## Contributing
@@ -15,9 +15,7 @@ If you find this project useful... please consider [making a donation](https://w
 
 ## Configuration
 
-* Visit _/admin/reports/service-uptime_
-* Click on the link to sign up for your Service Uptime account.
-* Add a service of type: web page
-* Copy the settings for Page URL and Search String into your service
-* Update the Statistics link from your new account.
-* Test your connection and site back and enjoy
+* [Sign up](http://www.serviceuptime.com/?aff=R779) for a free Service Uptime account.
+* Add a monitor using the values shown at _/admin/reports/service-uptime_.
+* Add additional configuration to your monitor as desired.
+* Test your connection from the Service Uptime control panel.

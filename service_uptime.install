@@ -1,21 +1,14 @@
 <?php
+
 /**
  * @file
  * Handles installation steps for service_uptime
- *
- * @ingroup func_search
- * @{
  */
 
 /**
  * The install hook will fire when the module gets installed
  */
 function service_uptime_install() {
-  // This variable will be deleted the first time the admin settings form is
-  // submitted @see service_uptime_admin_settings_submit
-  // it allows us to know that the user is in "first-run" mode.
-  variable_set('service_uptime_first_run', TRUE);
-
   // Generate a unique private key and store it.
   variable_set('service_uptime_private_key', md5(rand(5000, 10000)));
 }
@@ -24,7 +17,6 @@ function service_uptime_install() {
  * The uninstall hook will fire when the module gets uninstalled.
  */
 function service_uptime_uninstall() {
-
   //Clean up our entries in the variables table.
   if ($result = db_query("SELECT name FROM {variable} WHERE `name` LIKE 'service_uptime%'")) {
     foreach ($result as $data) {
@@ -34,14 +26,7 @@ function service_uptime_uninstall() {
 }
 
 /**
- * Implementation of hook_requirements().
- *
- * Checks installation requirements and do status reporting.
- * http://api.drupal.org/api/function/hook_requirements
- *
- * @param phase 'install' or 'runtime':
- *
- * @return A keyed array of requirements
+ * Implements hook_requirements().
  */
 function service_uptime_requirements($phase) {
   $reqs = array();
@@ -123,4 +108,3 @@ function _service_uptime_check_service() {
   return TRUE;
 }
 
-/** @} */ //end of group service_uptime

@@ -52,16 +52,14 @@ function service_uptime_stats_page() {
       curl_close($ch);
     }
     else {
-      $output .= t('Your host provider has disabled all functions to handle remote pages. You may still view your statistics by logging in to your account at @link', array(
-        '@link' => _service_uptime_l(),
+      $output .= t('Your host provider has disabled all functions to handle remote pages. You may still view your statistics by logging in to your account at <a href="!url">Service Uptime</a>.', array(
+        '!url' => service_uptime_url(),
       ));
     }
     // Remove the footer.
     $output = preg_replace('/(<TR>.*<\/TR>\s*)(<\/TABLE>)/i', '\2', $output);
 
-    $output .= '<div class="footer">' . t('For more details log in to your account at !link', array(
-        '!link' => _service_uptime_l(NULL, '/users/services.php'),
-      )) . '</div><!-- /.footer -->' . "\n";
+    $output .= '<div class="footer">' . t('For more details log in to your account at <a href="!url">Service Uptime</a>', array('!url' => service_uptime_url('/users/services.php'))) . '</div><!-- /.footer -->' . "\n";
   }
 
   return $output;

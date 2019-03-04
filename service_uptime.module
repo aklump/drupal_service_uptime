@@ -1,10 +1,8 @@
 <?php
+
 /**
  * @file
- * Base module file for service_uptime
- *
- * @defgroup service_uptime Service Uptime Module
- * @{
+ * Base module file for service_uptime.
  */
 
 /**
@@ -48,29 +46,6 @@ define('SERVICE_UPTIME_EXAMPLE_LINK', 'https://www.serviceuptime.com/users/monit
  * @var SERVICE_UPTIME_PATH_CHECK
  */
 define('SERVICE_UPTIME_PATH_CHECK', 'service-uptime/check');
-
-/**
- * Get an <a> tag with the correctly formatted affiliate link
- *
- * @param string $title
- * @param string $url
- *
- * @return string
- */
-function _service_uptime_l($title = '', $path = '/') {
-  $title = empty($title) ? 'www.ServiceUptime.com' : $title;
-  $options = [
-    'html' => TRUE,
-    'attributes' => array(
-      'onclick' => 'window.open(this.href); return false;',
-    ),
-  ];
-  if ($path === '/') {
-    $options['query']['aff'] = 'R779';
-  }
-
-  return l($title, 'http://www.serviceuptime.com/' . trim($path, '/'), $options);
-}
 
 /**
  * Implementation of hook_perm()
@@ -124,17 +99,6 @@ function service_uptime_menu() {
 }
 
 /**
- * Return the service uptime query string for this website
- */
-function _service_uptime_get_qs() {
-  if (($qs = variable_get('service_uptime_qs', NULL)) && preg_match(SERVICE_UPTIME_REGEX, $qs, $found) && $found[1]) {
-    return $found[1];
-  };
-
-  return FALSE;
-}
-
-/**
  * Implementation of hook_theme
  */
 function service_uptime_theme($existing, $type, $theme, $path) {
@@ -147,17 +111,38 @@ function service_uptime_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Get the private key (URL query k=)
+ * Return the service uptime query string for this website
  */
-function _service_uptime_private_key() {
-  return variable_get('service_uptime_private_key', NULL);
+function _service_uptime_get_qs() {
+  if (($qs = variable_get('service_uptime_qs', NULL)) && preg_match(SERVICE_UPTIME_REGEX, $qs, $found) && $found[1]) {
+    return $found[1];
+  };
+
+  return FALSE;
+}
+
+/**
+ * Return a link to a service uptime URL.
+ *
+ * @param string $path
+ *   The path at service uptime.
+ *
+ * @return string
+ *   The full URL with affiliate link when appropriate.
+ */
+function service_uptime_url($path = '/') {
+  if ($path === '/') {
+    $options['query']['aff'] = 'R779';
+  }
+
+  return url('http://www.serviceuptime.com/' . trim($path, '/'), $options);
 }
 
 /**
  * Get the hash (Search String)
  */
 function _service_uptime_hash($seed = NULL) {
-  $seed = empty($seed) ? _service_uptime_private_key() : $seed;
+  $seed = empty($seed) ? variable_get('service_uptime_private_key', NULL) : $seed;
   if ($seed) {
     $token = md5($seed . drupal_get_private_key());
 
@@ -166,5 +151,3 @@ function _service_uptime_hash($seed = NULL) {
 
   return FALSE;
 }
-
-/** @} */ //end of group service_uptime
