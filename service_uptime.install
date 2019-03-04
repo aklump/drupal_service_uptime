@@ -36,7 +36,7 @@ function service_uptime_uninstall() {
 
   //Clean up our entries in the variables table.
   if ($result = db_query("SELECT name FROM {variable} WHERE `name` LIKE 'service_uptime%'")) {
-    foreach($result as $data) {
+    foreach ($result as $data) {
       variable_del($data->name);
     }
   }
@@ -52,6 +52,7 @@ function service_uptime_uninstall() {
  * http://api.drupal.org/api/function/hook_requirements
  *
  * @param phase 'install' or 'runtime':
+ *
  * @return A keyed array of requirements
  */
 function service_uptime_requirements($phase) {
@@ -89,6 +90,7 @@ function service_uptime_requirements($phase) {
       );
     }
   }
+
   return $reqs;
 }
 
@@ -99,35 +101,37 @@ function _service_uptime_check_service() {
   if (!($qs = _service_uptime_get_qs()) || !variable_get('service_uptime_private_key', NULL)) {
     return -1;
   }
-  elseif(intval(get_cfg_var('allow_url_fopen')) && function_exists('file_get_contents')) {
-    if(!($content = @file_get_contents(SERVICE_UPTIME_URL_STATS . $qs))) {
-        return FALSE;
+  elseif (intval(get_cfg_var('allow_url_fopen')) && function_exists('file_get_contents')) {
+    if (!($content = @file_get_contents(SERVICE_UPTIME_URL_STATS . $qs))) {
+      return FALSE;
     }
     else {
-        return TRUE;
+      return TRUE;
     }
   }
-  elseif(intval(get_cfg_var('allow_url_fopen')) && function_exists('file')) {
-    if(!($content = @file(SERVICE_UPTIME_URL_STATS . $qs))) {
-        return FALSE;
+  elseif (intval(get_cfg_var('allow_url_fopen')) && function_exists('file')) {
+    if (!($content = @file(SERVICE_UPTIME_URL_STATS . $qs))) {
+      return FALSE;
     }
     else {
-        return TRUE;
+      return TRUE;
     }
   }
-  elseif(function_exists('curl_init')) {
-    $ch = curl_init (SERVICE_UPTIME_URL_STATS . $qs);
-    curl_setopt ($ch, CURLOPT_HEADER, 0);
-    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_exec ($ch);
+  elseif (function_exists('curl_init')) {
+    $ch = curl_init(SERVICE_UPTIME_URL_STATS . $qs);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_exec($ch);
 
-    if(curl_error($ch))
-        return FALSE;
-    curl_close ($ch);
+    if (curl_error($ch)) {
+      return FALSE;
+    }
+    curl_close($ch);
   }
   else {
     return -2;
   }
+
   return TRUE;
 }
 

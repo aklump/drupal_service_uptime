@@ -58,6 +58,7 @@ function _service_uptime_url() {
   if (1) {
     $url .= '?aff=R779';
   }
+
   return $url;
 }
 
@@ -67,6 +68,7 @@ function _service_uptime_url() {
 function _service_uptime_l($title = '', $url = '') {
   $title = empty($title) ? 'www.ServiceUptime.com' : $title;
   $url = empty($url) ? _service_uptime_url() : $url;
+
   return l($title, $url, array('attributes' => array('onclick' => 'window.open(this.href); return false;')));
 }
 
@@ -117,6 +119,7 @@ function service_uptime_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'service_uptime.pages.inc',
   );
+
   return $items;
 }
 
@@ -125,6 +128,7 @@ function service_uptime_menu() {
  */
 function service_update_is_allowed() {
   return TRUE;
+
   return in_array($_SERVER['HTTP_HOST'], array(
     'serviceuptime.com',
   ));
@@ -137,6 +141,7 @@ function _service_uptime_get_qs() {
   if (($qs = variable_get('service_uptime_qs', NULL)) && preg_match(SERVICE_UPTIME_REGEX, $qs, $found) && $found[1]) {
     return $found[1];
   };
+
   return FALSE;
 }
 
@@ -166,8 +171,10 @@ function _service_uptime_hash($seed = NULL) {
   $seed = empty($seed) ? _service_uptime_private_key() : $seed;
   if ($seed) {
     $token = md5($seed . drupal_get_private_key());
+
     return $token;
   }
+
   return FALSE;
 }
 
