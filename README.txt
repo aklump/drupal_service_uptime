@@ -33,11 +33,13 @@ Contact The Developer
    PO Box 29294 Bellingham, WA 98228-1294
    skype: intheloftstudios
 
-   http://www.intheloftstudios.com/
-   https://github.com/aklump
+   [4]http://www.intheloftstudios.com/
+   [5]https://github.com/aklump
 
 References
 
    1. http://www.serviceuptime.com/?aff=R779
    2. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4E5KZHDQCEUV8&item_name=Gratitude%20for%20aklump%2Fservice_uptime
    3. http://www.serviceuptime.com/?aff=R779
+   4. http://www.intheloftstudios.com/
+   5. https://github.com/aklump
