@@ -7,10 +7,18 @@ Created: March 4, 2019
 
 The endpoint page loads with embedded token string.
 
+## Pre-Conditions
+
+1. Make sure _Service Uptime Statistics Link_ has been entered in [the settings](/admin/reports/service-uptime/settings).
+
 ## Test Execution
 
 1. Visit [the Settings](/admin/reports/service-uptime/settings).
 1. Click on _Monitor Settings_ to reveal the hidden data.
+    - Assert _Name_ is the site name.
+    - Assert _Service_ is `web_page`
+    - Assert _Page Url_ is not empty.
+    - Assert _Search string_ is not empty.
 1. Click the _Test_ link next to the _Page Url_.
   - Assert a new window opens.
   - Assert you see a string of text on a white page.

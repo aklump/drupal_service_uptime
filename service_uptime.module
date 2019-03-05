@@ -13,13 +13,6 @@
 define('SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE', 'You have not yet configured your Service Uptime settings; please <a href="!admin_settings_url">click here</a>.');
 
 /**
- * This is the base url for stats.
- *
- * @var SERVICE_UPTIME_URL_STATS
- */
-define('SERVICE_UPTIME_URL_STATS', 'http://www.serviceuptime.com/users/servicestat.php');
-
-/**
  * This is the regex for checking user token links.
  *
  * @var SERVICE_UPTIME_REGEX
@@ -29,7 +22,7 @@ define('SERVICE_UPTIME_REGEX', '/^https?:\/\/www\.serviceuptime.com\/users\/(?:u
 /**
  * The url to be used to link to stats page.
  *
- * @var SERVICE_UPTIME_URL_STATS
+ * @var SERVICE_UPTIME_PATH_DRUPAL_STATS
  */
 define('SERVICE_UPTIME_PATH_DRUPAL_STATS', 'admin/reports/service-uptime/stats');
 
@@ -45,7 +38,7 @@ define('SERVICE_UPTIME_PATH_DRUPAL_SETTINGS', 'admin/reports/service-uptime/sett
  *
  * @var SERVICE_UPTIME_EXAMPLE_LINK
  */
-define('SERVICE_UPTIME_EXAMPLE_LINK', 'https://www.serviceuptime.com/users/monitoring.php?S=a07db1b0170f92d081fec95806daef7f&Id=12259');
+define('SERVICE_UPTIME_EXAMPLE_LINK', 'https://www.serviceuptime.com/users/uptimemonitoring.php?S=a07db1b0170f92d081fec95806daef7f&Id=12259');
 
 /**
  * The internal drupal path to the check url for SU to ping.
@@ -74,6 +67,7 @@ function service_uptime_menu() {
 
   $items['admin/reports/service-uptime'] = array(
     'title' => 'Service Uptime',
+    'description' => 'View your uptime statistics and manage settings.',
     'page callback' => 'service_uptime_stats_page',
     'access arguments' => array('administer service_uptime'),
     'type' => MENU_NORMAL_ITEM,
@@ -93,8 +87,6 @@ function service_uptime_menu() {
     'file' => 'service_uptime.admin.inc',
   );
   $items[SERVICE_UPTIME_PATH_CHECK] = array(
-    'title' => 'title',
-    'description' => 'description',
     'page callback' => 'service_uptime_check_page',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
@@ -139,18 +131,15 @@ function service_uptime_url($path = '/') {
  * Get the hash (Search String)
  *
  * @param null $seed
+ *   A seed to use instead of the default.
  *
- * @return bool|string
+ * @return false|string
+ *   FALSE if the hash cannot be generated. String otherwise.
  */
 function service_uptime_get_public_hash($seed = NULL) {
   $seed = empty($seed) ? variable_get('service_uptime_private_key', NULL) : $seed;
-  if ($seed) {
-    $token = md5($seed . drupal_get_private_key());
 
-    return $token;
-  }
-
-  return FALSE;
+  return $seed ? md5($seed . drupal_get_private_key()) : FALSE;
 }
 
 
@@ -175,7 +164,7 @@ function service_uptime_get_statistics_markup() {
       return FALSE;
     }
 
-    $content = @join('', $content);
+    $content = @implode('', $content);
   }
   elseif (function_exists('curl_init')) {
     $ch = curl_init($url);

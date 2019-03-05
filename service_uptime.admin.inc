@@ -20,8 +20,8 @@ function service_uptime_admin_settings() {
   $stats_link = variable_get('service_uptime_qs', NULL);
 
   if (!$stats_link) {
-    $form['singup'] = array(
-      '#markup' => t('<h2><a href="!url">Get your free account &rarr;</a></h2>', [
+    $form['signup'] = array(
+      '#markup' => t('<h2><a href="!url" target="_blank">Get your free account &rarr;</a></h2>', [
         '!url' => service_uptime_url(),
       ]),
     );
@@ -77,9 +77,10 @@ function service_uptime_admin_settings() {
 
   $form['service_uptime_qs'] = array(
     '#type' => 'textfield',
-    '#description' => t('<p>Enter your statistics link.  Click !link and find the "Direct Link".  Copy it here. It will resemble <strong>!this</strong></p><p>You also will have to <a href="!public">enable</a> public statistics.</p>', array(
+    '#description' => t('<p>Click <a href="!url" target="_blank">here</a> and locate the "Direct Link" URL; copy it in this box.  It will resemble <strong>!this</strong></p><p>You also will have to <a href="!public" target="_blank">enable</a> public statistics.</p>', array(
       '!url' => service_uptime_url('/users/openstat.php'),
       '!this' => SERVICE_UPTIME_EXAMPLE_LINK,
+      '!public' => service_uptime_url('/users/openstatmulti.php'),
     )),
     '#title' => t('Service Uptime Statistics Link'),
     '#default_value' => $stats_link,

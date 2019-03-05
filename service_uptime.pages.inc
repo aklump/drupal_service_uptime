@@ -31,9 +31,19 @@ function service_uptime_stats_page() {
     }
 
     $build[] = [
-      '#markup' => '<div class="footer">' . t('For more details log in to your account at <a href="!url">Service Uptime</a>', array('!url' => service_uptime_url('/users/services.php'))) . '</div><!-- /.footer -->',
+      '#prefix' => '<section class="service-uptime-stats__drupal-footer">',
+      '#suffix' => '</section>',
+      '#markup' => t('<a href="!url" target="_blank">Goto your account at Service Uptime.</a> &rarr;', [
+        '!url' => service_uptime_url('/users/services.php'),
+      ]),
     ];
   }
+
+  $build = [
+    '#prefix' => '<div class="service-uptime-stats">',
+    '#suffix' => '</div>',
+    0 => $build,
+  ];
 
   return $build;
 }
