@@ -31,5 +31,5 @@ sourcecode@intheloftstudios.com
 PO Box 29294 Bellingham, WA 98228-1294  
 skype: intheloftstudios  
 
-http://www.intheloftstudios.com/  
-https://github.com/aklump  
+<http://www.intheloftstudios.com/>  
+<https://github.com/aklump>  
