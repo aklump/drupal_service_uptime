@@ -1,4 +1,0 @@
-service_uptime:
-  css:
-    theme:
-      service_uptime.css: {}

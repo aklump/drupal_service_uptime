@@ -80,7 +80,6 @@ class ServiceUptimeAdminSettings extends ConfigFormBase {
 
   public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $form = ['#tree' => FALSE];
-    $form['#attached']['library'][] = 'service_uptime/service_uptime';
     $stats_link = $this->config('service_uptime.settings')
       ->get('stats_url');
 
