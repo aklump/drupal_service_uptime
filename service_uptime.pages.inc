@@ -14,7 +14,7 @@ function service_uptime_stats_page() {
 
   $output = '';
 
-  if (!($qs = service_uptime_get_qs())) {
+  if (!($qs = service_uptime_get_account_query_string())) {
     $output .= theme('service_uptime_configure_message');
   }
   else {

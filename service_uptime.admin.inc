@@ -17,9 +17,9 @@ function service_uptime_admin_settings() {
     'type' => 'file',
     'data' => drupal_get_path('module', 'service_uptime') . '/css/service_uptime.css',
   );
-  $query_string = service_uptime_get_qs();
+  $stats_link = variable_get('service_uptime_qs', NULL);
 
-  if (!$query_string) {
+  if (!$stats_link) {
     $form['singup'] = array(
       '#markup' => t('<h2><a href="!url">Get your free account &rarr;</a></h2>', [
         '!url' => service_uptime_url(),
@@ -34,7 +34,7 @@ function service_uptime_admin_settings() {
       '#description' => t('Use these values when adding your "website" monitor to your Service Uptime account.'),
       '#weight' => -10,
       '#collapsible' => TRUE,
-      '#collapsed' => !empty($query_string),
+      '#collapsed' => !empty($stats_link),
     );
 
     $form['edit_service']['name'] = array(
@@ -77,12 +77,12 @@ function service_uptime_admin_settings() {
 
   $form['service_uptime_qs'] = array(
     '#type' => 'textfield',
-    '#description' => t('<p>Enter your statistics link.  Click !link and find the "Direct Link".  Copy it here. It will resemble <strong><a href="!url">this page</a></strong>.</p><p>You also will have to <a href="!public">enable</a> public statistics.</p>', array(
+    '#description' => t('<p>Enter your statistics link.  Click !link and find the "Direct Link".  Copy it here. It will resemble <strong>!this</strong></p><p>You also will have to <a href="!public">enable</a> public statistics.</p>', array(
       '!url' => service_uptime_url('/users/openstat.php'),
       '!this' => SERVICE_UPTIME_EXAMPLE_LINK,
     )),
     '#title' => t('Service Uptime Statistics Link'),
-    '#default_value' => $query_string,
+    '#default_value' => $stats_link,
     '#required' => FALSE,
     '#size' => 120,
   );

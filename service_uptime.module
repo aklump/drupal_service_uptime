@@ -115,8 +115,8 @@ function service_uptime_theme($existing, $type, $theme, $path) {
  *
  * This is a portion of the Service Uptime Statistics Link entered in settings.
  */
-function service_uptime_get_qs() {
-  if (($qs = variable_get('service_uptime_qs', NULL)) && preg_match(SERVICE_UPTIME_REGEX, $qs, $found) && $found[1]) {
+function service_uptime_get_account_query_string() {
+  if (($link = variable_get('service_uptime_qs', NULL)) && preg_match(SERVICE_UPTIME_REGEX, $link, $found) && $found[1]) {
     return $found[1];
   };
 
