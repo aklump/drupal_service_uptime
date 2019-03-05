@@ -39,17 +39,20 @@ function service_uptime_requirements($phase) {
       );
       switch ($check) {
         case -1:
-          $reqs['service_uptime']['description'] = t(SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE, [
+          $reqs['service_uptime']['value'] = $t('Not configured');
+          $reqs['service_uptime']['description'] = $t(SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE, [
             '!admin_settings_url' => url(SERVICE_UPTIME_PATH_DRUPAL_SETTINGS),
           ]);
           break;
 
         case -2:
+          $reqs['service_uptime']['value'] = $t('Server error');
           $reqs['service_uptime']['description'] = $t('Your server does not support this module.');
           break;
 
         case FALSE:
         default:
+          $reqs['service_uptime']['value'] = $t('Connection problem');
           $reqs['service_uptime']['description'] = $t('Unable to connect to Service Uptime to retrieve statistics.');
           break;
       }
@@ -57,7 +60,7 @@ function service_uptime_requirements($phase) {
     else {
       $reqs['service_uptime'] = array(
         'title' => $t('Service Uptime'),
-        'value' => $t('Connected and Ready'),
+        'value' => $t('Connected and ready'),
         'severity' => REQUIREMENT_OK,
         'description' => $t('<a href="@url">View</a> your statistics.', array(
           '@url' => url(SERVICE_UPTIME_PATH_DRUPAL_STATS),
