@@ -60,11 +60,19 @@ class DefaultController extends ControllerBase {
       }
 
       $build[] = [
-        '#markup' => '<div class="footer">' . t('For more details log in to your account at <a href=":url">Service Uptime</a>', [
-            ':url' => $this->serviceUptime->getUrl('/users/services.php'),
-          ]) . '</div><!-- /.footer -->',
+        '#prefix' => '<section class="service-uptime-stats__drupal-footer">',
+        '#suffix' => '</section>',
+        '#markup' => $this->t('<a href=":url" target="_blank">Goto your account at Service Uptime.</a> &rarr;', [
+          ':url' => $this->serviceUptime->getUrl('/users/services.php'),
+        ]),
       ];
     }
+
+    $build = [
+      '#prefix' => '<div class="service-uptime-stats">',
+      '#suffix' => '</div>',
+      0 => $build,
+    ];
 
     return $build;
   }

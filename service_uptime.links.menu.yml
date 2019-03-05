@@ -1,4 +1,5 @@
 service_uptime.stats_page:
   route_name: service_uptime.stats_page
   title: 'Service Uptime'
+  description: View your uptime statistics and manage settings.
   parent: system.admin_reports

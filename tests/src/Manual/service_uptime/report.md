@@ -12,8 +12,10 @@ The report page shows the statistics from Service Uptime with and without embedd
 1. Make sure _Service Uptime Statistics Link_ has been entered in [the settings](/admin/reports/service-uptime/settings).
 
 ## Test Execution
-
-1. Visit [the View Stats page](/admin/reports/service-uptime)
+1. Visit [the Reports page](/admin/reports)
+    - Assert a link exists to _Service Uptime_
+    - Assert the link has a description below it.
+1. Click the link.    
   - Assert you see statistics loaded from Service Uptime.
 1. Visit [the settings](/admin/reports/service-uptime/settings) and remove _Service Uptime Statistics Link_
 1. Click _Save configuration_. 
