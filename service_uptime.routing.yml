@@ -1,0 +1,20 @@
+service_uptime.stats_page:
+  path: /admin/reports/service-uptime
+  defaults:
+    _title: 'Service Uptime'
+    _controller: '\Drupal\service_uptime\Controller\DefaultController::statisticsPage'
+  requirements:
+    _permission: 'administer service_uptime'
+service_uptime.admin_settings:
+  path: /admin/reports/service-uptime/settings
+  defaults:
+    _title: Settings
+    _form: \Drupal\service_uptime\Form\ServiceUptimeAdminSettings
+  requirements:
+    _permission: 'administer service_uptime'
+service_uptime.check_page:
+  path: /service-uptime/check
+  defaults:
+    _controller: '\Drupal\service_uptime\Controller\DefaultController::checkPage'
+  requirements:
+    _access: 'TRUE'

@@ -1,0 +1,4 @@
+services:
+  service_uptime:
+    class: Drupal\service_uptime\Service\ServiceUptime
+    arguments: ['@config.factory', '@private_key']

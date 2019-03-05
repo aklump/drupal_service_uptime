@@ -1,0 +1,10 @@
+service_uptime.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    fail_on_next:
+      type: 'boolean'
+    stats_url:
+      type: 'string'
+    public_key:
+      type: 'string'

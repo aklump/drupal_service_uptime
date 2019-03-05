@@ -1,0 +1,9 @@
+service_uptime.stats_page:
+  route_name: service_uptime.stats_page
+  title: 'View Stats'
+  weight: -10
+  base_route: service_uptime.stats_page
+service_uptime.admin_settings:
+  route_name: service_uptime.admin_settings
+  title: Settings
+  base_route: service_uptime.stats_page

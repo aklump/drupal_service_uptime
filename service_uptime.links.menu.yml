@@ -1,0 +1,4 @@
+service_uptime.stats_page:
+  route_name: service_uptime.stats_page
+  title: 'Service Uptime'
+  parent: system.admin_reports

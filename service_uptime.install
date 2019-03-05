@@ -5,44 +5,41 @@
  * Handles installation steps for service_uptime
  */
 
+use Drupal\Core\Url;
+use Drupal\service_uptime\Service\ServiceUptime;
+
 /**
  * The install hook will fire when the module gets installed
  */
 function service_uptime_install() {
   // Generate a unique private key and store it.
-  variable_set('service_uptime_private_key', md5(rand(5000, 10000)));
-}
-
-/*
- * The uninstall hook will fire when the module gets uninstalled.
- */
-function service_uptime_uninstall() {
-  //Clean up our entries in the variables table.
-  if ($result = db_query("SELECT name FROM {variable} WHERE `name` LIKE 'service_uptime%'")) {
-    foreach ($result as $data) {
-      variable_del($data->name);
-    }
-  }
+  \Drupal::configFactory()
+    ->getEditable('service_uptime.settings')
+    ->set('public_key', md5(rand(5000, 10000)))
+    ->save();
 }
 
 /**
  * Implements hook_requirements().
  */
 function service_uptime_requirements($phase) {
-  $reqs = array();
-  $t = get_t();
+  $reqs = [];
+  $t = 't';
   if ($phase == 'runtime') {
     if (($check = _service_uptime_check_service()) !== TRUE) {
-      $reqs['service_uptime'] = array(
+      $reqs['service_uptime'] = [
         'title' => $t('Service Uptime'),
         'severity' => REQUIREMENT_WARNING,
-      );
+      ];
+
       switch ($check) {
         case -1:
           $reqs['service_uptime']['value'] = $t('Not configured');
-          $reqs['service_uptime']['description'] = $t(SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE, [
-            '!admin_settings_url' => url(SERVICE_UPTIME_PATH_DRUPAL_SETTINGS),
+          $reqs['service_uptime']['description'] = $t(ServiceUptime::NOT_CONFIGURED_MESSAGE, [
+            ':admin_settings_url' => Url::fromRoute('service_uptime.admin_settings')
+              ->toString(),
           ]);
+
           break;
 
         case -2:
@@ -58,14 +55,14 @@ function service_uptime_requirements($phase) {
       }
     }
     else {
-      $reqs['service_uptime'] = array(
+      $reqs['service_uptime'] = [
         'title' => $t('Service Uptime'),
         'value' => $t('Connected and ready'),
         'severity' => REQUIREMENT_OK,
-        'description' => $t('<a href="@url">View</a> your statistics.', array(
-          '@url' => url(SERVICE_UPTIME_PATH_DRUPAL_STATS),
-        )),
-      );
+        'description' => $t('<a href=":url">View</a> your statistics.', [
+          ':url' => Url::fromRoute('service_uptime.stats_page')->toString(),
+        ]),
+      ];
     }
   }
 
@@ -76,11 +73,13 @@ function service_uptime_requirements($phase) {
  * Checks to make sure the service is configured and able to report stats
  */
 function _service_uptime_check_service() {
-  if (!($qs = service_uptime_get_account_query_string()) || !variable_get('service_uptime_private_key', NULL)) {
+  $su = \Drupal::service('service_uptime');
+  if (!($qs = $su->getAccountQueryString())
+    || !\Drupal::config('service_uptime.settings')->get('public_key')) {
     return -1;
   }
   try {
-    return boolval(service_uptime_get_statistics_markup());
+    return boolval($su->getStatisticsMarkup());
   }
   catch (\Exception $exception) {
     return -2;

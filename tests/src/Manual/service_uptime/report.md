@@ -19,3 +19,5 @@ The report page shows the statistics from Service Uptime with and without embedd
 1. Click _Save configuration_. 
 1. Visit [the View Stats page](/admin/reports/service-uptime)
   - Assert you see message to configure your settings.
+1. Click the link in the message.
+    - Assert the settings page loads.

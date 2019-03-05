@@ -1,0 +1,3 @@
+'administer service_uptime':
+  title: 'Administer service_uptime'
+  description: 'Perform administration tasks for service_uptime.'
