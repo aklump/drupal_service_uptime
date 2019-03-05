@@ -6,5 +6,5 @@ service_uptime.settings:
       type: 'boolean'
     stats_url:
       type: 'string'
-    public_key:
+    public_seed:
       type: 'string'

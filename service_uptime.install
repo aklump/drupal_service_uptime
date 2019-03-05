@@ -12,10 +12,10 @@ use Drupal\service_uptime\Service\ServiceUptime;
  * The install hook will fire when the module gets installed
  */
 function service_uptime_install() {
-  // Generate a unique private key and store it.
+  // Generate a unique public key and store it.
   \Drupal::configFactory()
     ->getEditable('service_uptime.settings')
-    ->set('public_key', md5(rand(5000, 10000)))
+    ->set('public_seed', md5(rand(5000, 10000)))
     ->save();
 }
 
@@ -75,7 +75,7 @@ function service_uptime_requirements($phase) {
 function _service_uptime_check_service() {
   $su = \Drupal::service('service_uptime');
   if (!($qs = $su->getAccountQueryString())
-    || !\Drupal::config('service_uptime.settings')->get('public_key')) {
+    || !\Drupal::config('service_uptime.settings')->get('public_seed')) {
     return -1;
   }
   try {

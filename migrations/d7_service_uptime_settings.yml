@@ -1,0 +1,18 @@
+id: d7_service_uptime_settings
+label: Service Uptime settings
+migration_tags:
+  - Drupal 7
+source:
+  plugin: variable
+  variables:
+    - service_uptime_private_key
+    - service_uptime_qs
+  source_module: service_uptime
+process:
+  stats_url: service_uptime_qs
+  public_seed: service_uptime_private_key
+destination:
+  plugin: config
+  config_name: service_uptime.settings
+
+

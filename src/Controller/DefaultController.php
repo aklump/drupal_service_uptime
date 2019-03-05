@@ -98,14 +98,14 @@ class DefaultController extends ControllerBase {
       throw new AccessDeniedHttpException();
     }
     $seed = $request->get('s');
-    if (empty($seed) || $this->serviceUptime->getPublicHash($seed) != $this->serviceUptime->getPublicHash()) {
+    if (empty($seed) || $this->serviceUptime->getSearchString($seed) != $this->serviceUptime->getSearchString()) {
       throw new AccessDeniedHttpException();
     }
 
     return new Response(implode('', [
-      $this->serviceUptime->getPublicHash(time()),
-      $this->serviceUptime->getPublicHash($seed),
-      $this->serviceUptime->getPublicHash(time() / 2),
+      $this->serviceUptime->getSearchString(time()),
+      $this->serviceUptime->getSearchString($seed),
+      $this->serviceUptime->getSearchString(time() / 2),
     ]), 200, ['Content-Type' => 'text/plain']);
   }
 

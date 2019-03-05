@@ -1,16 +1,10 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\service_uptime\Form\ServiceUptimeAdminSettings.
- */
-
 namespace Drupal\service_uptime\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\service_uptime\Service\ServiceUptime;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -91,7 +85,8 @@ class ServiceUptimeAdminSettings extends ConfigFormBase {
       ];
     }
 
-    if ($hash = $this->serviceUptime->getPublicHash()) {
+    if ($search_string = $this->serviceUptime->getSearchString()) {
+
       $form['edit_service'] = [
         '#type' => 'details',
         '#title' => $this->t('Monitor Settings'),
@@ -119,10 +114,11 @@ class ServiceUptimeAdminSettings extends ConfigFormBase {
       // TODO Do we want to/can we use a CSRF token? https://www.drupal.org/docs/8/api/routing-system/access-checking-on-routes instead?
       $url = Url::fromRoute('service_uptime.check_page', [
         's' => $this->config('service_uptime.settings')
-          ->get('public_key'),
+          ->get('public_seed'),
       ], [
         'absolute' => TRUE,
       ]);
+
       $form['edit_service']['page_url'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Page Url'),
@@ -134,12 +130,11 @@ class ServiceUptimeAdminSettings extends ConfigFormBase {
         ]),
       ];
 
-
-      $form['edit_service']['service_uptime_public_key'] = [
+      $form['edit_service']['service_uptime_public_seed'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Search string'),
         '#description' => $this->t('Page should contain this text'),
-        '#default_value' => $hash,
+        '#default_value' => $search_string,
         '#size' => 60,
         '#attributes' => [
           'readonly' => TRUE,

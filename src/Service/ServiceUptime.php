@@ -93,8 +93,8 @@ class ServiceUptime {
    * @return false|string
    *   FALSE if the hash cannot be generated. String otherwise.
    */
-  public function getPublicHash($seed = NULL) {
-    $seed = empty($seed) ? $this->settings->get('public_key') : $seed;
+  public function getSearchString($seed = NULL) {
+    $seed = empty($seed) ? $this->settings->get('public_seed') : $seed;
     return $seed ? md5($seed . $this->privateKey->get()) : FALSE;
   }
 
