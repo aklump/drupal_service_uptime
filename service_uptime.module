@@ -158,3 +158,54 @@ function _service_uptime_get_public_hash($seed = NULL) {
 
   return FALSE;
 }
+
+
+/**
+ * Return the statistics markup from Service Uptime for an URL.
+ *
+ * @param string $url
+ *   The statistics URL.
+ *
+ * @return string
+ *   The markup.
+ *
+ * @throws \RuntimeException
+ *   If the server cannot make a remote connection.
+ */
+function service_uptime_get_statistics_markup() {
+  $url = variable_get('service_uptime_qs', NULL);
+  if (intval(get_cfg_var('allow_url_fopen')) && function_exists('file_get_contents')) {
+    if (!($content = @file_get_contents($url))) {
+      return FALSE;
+    }
+  }
+  elseif (intval(get_cfg_var('allow_url_fopen')) && function_exists('file')) {
+    if (!($content = @file($url))) {
+      return FALSE;
+    }
+
+    $content = @join('', $content);
+  }
+  elseif (function_exists('curl_init')) {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    ob_start();
+    $content = curl_exec($ch);
+    if (curl_error($ch)) {
+      $content = FALSE;
+    }
+    curl_close($ch);
+    if (!$content) {
+      return $content;
+    }
+  }
+  if ($content) {
+    if (!preg_match('/<section\s*id="content".+?<\/section>/si', $content, $matches)) {
+      return FALSE;
+    }
+
+    return $matches[0];
+  }
+  throw new \RuntimeException("This server is unable to make a remote connection.");
+}

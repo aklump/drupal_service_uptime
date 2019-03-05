@@ -46,8 +46,8 @@ function service_uptime_requirements($phase) {
           $reqs['service_uptime']['description'] = $t('Your server does not support this module.');
           break;
 
-        default:
         case FALSE:
+        default:
           $reqs['service_uptime']['description'] = $t('Unable to connect to Service Uptime to retrieve statistics.');
           break;
       }
@@ -74,37 +74,11 @@ function _service_uptime_check_service() {
   if (!($qs = service_uptime_get_account_query_string()) || !variable_get('service_uptime_private_key', NULL)) {
     return -1;
   }
-  elseif (intval(get_cfg_var('allow_url_fopen')) && function_exists('file_get_contents')) {
-    if (!($content = @file_get_contents(SERVICE_UPTIME_URL_STATS . $qs))) {
-      return FALSE;
-    }
-    else {
-      return TRUE;
-    }
+  try {
+    return boolval(service_uptime_get_statistics_markup());
   }
-  elseif (intval(get_cfg_var('allow_url_fopen')) && function_exists('file')) {
-    if (!($content = @file(SERVICE_UPTIME_URL_STATS . $qs))) {
-      return FALSE;
-    }
-    else {
-      return TRUE;
-    }
-  }
-  elseif (function_exists('curl_init')) {
-    $ch = curl_init(SERVICE_UPTIME_URL_STATS . $qs);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_exec($ch);
-
-    if (curl_error($ch)) {
-      return FALSE;
-    }
-    curl_close($ch);
-  }
-  else {
+  catch (\Exception $exception) {
     return -2;
   }
-
-  return TRUE;
 }
 
