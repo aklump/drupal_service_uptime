@@ -19,7 +19,7 @@ The status page reflects the state of the settings.
   - Assert _Monitor Settings_ is open, exposing it's fields.
   - Assert the link _Get your free account_ is present.
 1. Visit [the status page](/admin/reports/status)
-  - Assert you see a warning indicatin service uptime is not yet configured.
+  - Assert you see a warning indicating service uptime is not yet configured.
 1. Click on the link in the warning
   - Assert you are taken to the settings page.  
 1. Paste in the _Service Uptime Statistics Link_

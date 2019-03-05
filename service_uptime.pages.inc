@@ -8,43 +8,34 @@
  * Generate the statistics page.
  */
 function service_uptime_stats_page() {
-  if (variable_get('service_uptime_stock_css', TRUE)) {
-    drupal_add_css(drupal_get_path('module', 'service_uptime') . '/css/service_uptime_stock.css');
-  }
+  $build = [];
 
-  $output = '';
   if (!($qs = service_uptime_get_account_query_string())) {
-    $output .= theme('service_uptime_configure_message');
+    $build[] = [
+      '#markup' => t(SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE, ['!admin_settings_url' => url(SERVICE_UPTIME_PATH_DRUPAL_SETTINGS)]),
+    ];
   }
   else {
     try {
       if (!($output = service_uptime_get_statistics_markup())) {
-        $output = t('Error processing request.');
+        $build[] = ['#markup' => t('Error processing request.')];
       }
+      $build[] = ['#markup' => $output];
     }
     catch (\Exception $exception) {
-      $output .= t('Your host provider has disabled all functions to handle remote pages. You may still view your statistics by logging in to your account at <a href="!url">Service Uptime</a>.', array(
-        '!url' => service_uptime_url(),
-      ));
+      $build[] = [
+        '#markup' => t('Your host provider has disabled all functions to handle remote pages. You may still view your statistics by logging in to your account at <a href="!url">Service Uptime</a>.', array(
+          '!url' => service_uptime_url(),
+        )),
+      ];
     }
 
-    $output .= '<div class="footer">' . t('For more details log in to your account at <a href="!url">Service Uptime</a>', array('!url' => service_uptime_url('/users/services.php'))) . '</div><!-- /.footer -->' . "\n";
+    $build[] = [
+      '#markup' => '<div class="footer">' . t('For more details log in to your account at <a href="!url">Service Uptime</a>', array('!url' => service_uptime_url('/users/services.php'))) . '</div><!-- /.footer -->',
+    ];
   }
 
-  return $output;
-}
-
-/**
- * Formats the message to users that their site needs to be configured.
- *
- * @ingroup themeable
- */
-function theme_service_uptime_configure_message() {
-  return t('You have not yet configured your Service Uptime settings; please <a href="@url">click here</a>.', array(
-    '@url' => url(SERVICE_UPTIME_PATH_DRUPAL_SETTINGS),
-  ));
-
-  return $output;
+  return $build;
 }
 
 /**
@@ -62,14 +53,14 @@ function service_uptime_check_page() {
     return MENU_NOT_FOUND;
   }
   $seed = isset($_GET['s']) ? $_GET['s'] : NULL;
-  if (empty($seed) || _service_uptime_get_public_hash($seed) != _service_uptime_get_public_hash()) {
+  if (empty($seed) || service_uptime_get_public_hash($seed) != service_uptime_get_public_hash()) {
     return MENU_NOT_FOUND;
   }
   drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
   echo(implode('', [
-    _service_uptime_get_public_hash(time()),
-    _service_uptime_get_public_hash($seed),
-    _service_uptime_get_public_hash(time() / 2),
+    service_uptime_get_public_hash(time()),
+    service_uptime_get_public_hash($seed),
+    service_uptime_get_public_hash(time() / 2),
   ]));
   drupal_exit();
 }

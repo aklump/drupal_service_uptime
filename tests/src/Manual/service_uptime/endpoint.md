@@ -7,8 +7,6 @@ Created: March 4, 2019
 
 The endpoint page loads with embedded token string.
 
-## Test
-
 ## Test Execution
 
 1. Visit [the Settings](/admin/reports/service-uptime/settings).

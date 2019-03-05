@@ -39,7 +39,9 @@ function service_uptime_requirements($phase) {
       );
       switch ($check) {
         case -1:
-          $reqs['service_uptime']['description'] = theme("service_uptime_configure_message");
+          $reqs['service_uptime']['description'] = t(SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE, [
+            '!admin_settings_url' => url(SERVICE_UPTIME_PATH_DRUPAL_SETTINGS),
+          ]);
           break;
 
         case -2:

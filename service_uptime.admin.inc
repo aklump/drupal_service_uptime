@@ -27,7 +27,7 @@ function service_uptime_admin_settings() {
     );
   }
 
-  if ($hash = _service_uptime_get_public_hash()) {
+  if ($hash = service_uptime_get_public_hash()) {
     $form['edit_service'] = array(
       '#type' => 'fieldset',
       '#title' => t('Monitor Settings'),
@@ -99,12 +99,6 @@ function service_uptime_admin_settings() {
     '#title' => t('Force a failure on next check'),
     '#description' => t('(Use sparingly as it will skew your results; do this to check if the failure email is working correctly.)'),
     '#default_value' => variable_get('service_uptime_force_failure', NULL),
-  );
-
-  $form['dev']['service_uptime_stock_css'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Embed the Service Uptime stylesheet on your Drupal statistics page?'),
-    '#default_value' => variable_get('service_uptime_stock_css', FALSE),
   );
 
   $form['#validate'][] = 'service_uptime_admin_settings_validate';

@@ -6,6 +6,13 @@
  */
 
 /**
+ * Message for not-yet-configured.
+ *
+ * @var SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE
+ */
+define('SERVICE_UPTIME_NOT_CONFIGURED_MESSAGE', 'You have not yet configured your Service Uptime settings; please <a href="!admin_settings_url">click here</a>.');
+
+/**
  * This is the base url for stats.
  *
  * @var SERVICE_UPTIME_URL_STATS
@@ -85,7 +92,6 @@ function service_uptime_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'service_uptime.admin.inc',
   );
-
   $items[SERVICE_UPTIME_PATH_CHECK] = array(
     'title' => 'title',
     'description' => 'description',
@@ -96,18 +102,6 @@ function service_uptime_menu() {
   );
 
   return $items;
-}
-
-/**
- * Implementation of hook_theme
- */
-function service_uptime_theme($existing, $type, $theme, $path) {
-  return array(
-    'service_uptime_configure_message' => array(
-      'arguments' => array(),
-      'file' => 'service_uptime.pages.inc',
-    ),
-  );
 }
 
 /**
@@ -148,7 +142,7 @@ function service_uptime_url($path = '/') {
  *
  * @return bool|string
  */
-function _service_uptime_get_public_hash($seed = NULL) {
+function service_uptime_get_public_hash($seed = NULL) {
   $seed = empty($seed) ? variable_get('service_uptime_private_key', NULL) : $seed;
   if ($seed) {
     $token = md5($seed . drupal_get_private_key());
@@ -163,11 +157,8 @@ function _service_uptime_get_public_hash($seed = NULL) {
 /**
  * Return the statistics markup from Service Uptime for an URL.
  *
- * @param string $url
- *   The statistics URL.
- *
  * @return string
- *   The markup.
+ *   The markup from Service Uptime.
  *
  * @throws \RuntimeException
  *   If the server cannot make a remote connection.
