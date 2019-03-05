@@ -7,3 +7,4 @@ push_tags = ask
 push_master = ask
 push_develop = no
 patch_prefix = -rc
+info_file = service_uptime.info.yml
