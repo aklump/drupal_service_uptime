@@ -6,5 +6,6 @@ create_tags = patch
 push_tags = ask
 push_master = ask
 push_develop = no
-patch_prefix = -rc
+patch_prefix = .
+preserve_patch_zero = true
 info_file = service_uptime.info.yml

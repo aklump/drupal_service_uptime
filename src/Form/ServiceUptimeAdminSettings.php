@@ -5,6 +5,7 @@ namespace Drupal\service_uptime\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\service_uptime\Service\ServiceUptime;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -116,6 +117,8 @@ class ServiceUptimeAdminSettings extends ConfigFormBase {
         's' => $this->config('service_uptime.settings')
           ->get('public_seed'),
       ], [
+        'html' => TRUE,
+        'attributes' => ['target' => '_blank'],
         'absolute' => TRUE,
       ]);
 
@@ -124,10 +127,7 @@ class ServiceUptimeAdminSettings extends ConfigFormBase {
         '#title' => $this->t('Page Url'),
         '#value' => $url->toString(),
         '#attributes' => ['readonly' => TRUE],
-        '#field_suffix' => $this->l($this->t('Test &rarr;'), $url, [
-          'html' => TRUE,
-          'attributes' => ['target' => '_blank'],
-        ]),
+        '#field_suffix' => Link::fromTextAndUrl($this->t('Test &rarr;'), $url),
       ];
 
       $form['edit_service']['service_uptime_public_seed'] = [
